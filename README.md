@@ -1,6 +1,5 @@
 ## apkLeaks
-[![release](https://img.shields.io/github/release/dwisiswant0/apkleaks.svg)](https://github.com/dwisiswant0/apkleaks/releases/)
-[![license](https://img.shields.io/github/license/dwisiswant0/apkleaks.svg)](https://github.com/dwisiswant0/apkleaks/blob/master/LICENSE)
+[![version](https://badge.fury.io/gh/dwisiswant0%2fapkleaks.svg)](https://badge.fury.io/gh/dwisiswant0%2fapkleaks.svg)
 [![contributions](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dwisiswant0/apkleaks/issues)
 
 Scanning APK file for URIs, endpoints & secrets.
