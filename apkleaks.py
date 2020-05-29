@@ -12,14 +12,16 @@ def header():
 def argument():
 	parser = argparse.ArgumentParser()
 	parser.add_argument("-f", "--file", help="APK file to scanning", type=str, required=True)
+	parser.add_argument("-o", "--output", help="Write to file results (NULL will be saved into random file)", type=str, required=False)
+	parser.add_argument("-p", "--pattern", help="Path to custom patterns JSON", type=str, required=False)
 	arg = parser.parse_args()
 	return arg
 
 if __name__ == "__main__":
 	print(colors.HEADER)
 	print(colors.HEADER + header() + colors.ENDC)
-	arg = argument()
-	init = apkleaks(arg.file)
+	args = argument()
+	init = apkleaks(args)
 	apk = init.integrity()
 	out = init.decompile()
 	init.scanning(out)
