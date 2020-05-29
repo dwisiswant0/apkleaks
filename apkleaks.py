@@ -2,10 +2,11 @@
 from apkleaks.apkleaks import apkleaks
 from apkleaks.colors import colors
 import argparse
+import os
 import shutil
 
 def header():
-	VERSION = open("VERSION", "r").read()
+	VERSION = open(os.path.dirname(os.path.realpath(__file__)) + "/VERSION", "r").read()
 	return ("     _    ____  _  ___               _        \n    / \\  |  _ \\| |/ / |    ___  __ _| | _____ \n   / _ \\ | |_) | ' /| |   / _ \\/ _` | |/ / __|\n  / ___ \\|  __/| . \\| |__|  __/ (_| |   <\\__ \\\n /_/   \\_\\_|   |_|\\_\\_____\\___|\\__,_|_|\\_\\___/\n # {}\n --\n Scanning APK file for secrets\n (c) 2020, dwisiswant0\n".format(VERSION))
 
 def argument():

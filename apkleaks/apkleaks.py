@@ -11,6 +11,7 @@ import tempfile
 class apkleaks:
 	def __init__(self, file):
 		self.file = file
+		self.current = os.path.dirname(os.path.realpath(__file__))
 
 	def apk_info(self):
 		return APK(self.file)
@@ -59,7 +60,7 @@ class apkleaks:
 
 	def scanning(self, path):
 		print("%s\n** Scanning against '%s' (v%s)%s" % (colors.OKBLUE, apk.get_package(), apk.get_androidversion_name(), colors.ENDC))
-		with open("config/regexes.json") as regexes:
+		with open(self.current + "/../config/regexes.json") as regexes:
 			regex = json.load(regexes)
 			for name, pattern in regex.items():
 				found = self.finder(pattern, path)
