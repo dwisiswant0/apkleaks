@@ -36,7 +36,7 @@ class apkleaks:
 	def decompile(self):
 		out = tempfile.mkdtemp(prefix=self.prefix)
 		print("%s** Decompiling APK...%s" % (colors.OKBLUE, colors.ENDC))
-		os.system("apktool d %s  -fro %s" % (self.file, out))
+		os.system("apktool d %s --no-assets -nc -fro %s" % (self.file, out))
 		return out
 
 	def unique(self, list): 
