@@ -1,11 +1,17 @@
 #!/usr/bin/env python
 from apk_parse.apk import APK
 from colors import colors
+from contextlib import closing
 from distutils.spawn import find_executable
+from urllib2 import urlopen
+from zipfile import ZipFile
+import io
 import json
 import numpy
 import os
 import re
+import shutil
+import stat
 import tempfile
 
 class apkleaks:
@@ -15,29 +21,48 @@ class apkleaks:
 		self.main_dir = os.path.dirname(os.path.realpath(__file__))
 		self.output = tempfile.mkstemp(suffix=".txt", prefix=self.prefix)[1] if args.output is None else args.output
 		self.pattern = self.main_dir + "/../config/regexes.json" if args.pattern is None else args.pattern
+		self.jadx = find_executable("jadx") if find_executable("jadx") is not None else self.main_dir + "/../jadx/bin/jadx%s" % (".bat" if os.name == "nt" else "")
 
 	def apk_info(self):
 		return APK(self.file)
 
+	def dependencies(self):
+		exter = "https://github.com/skylot/jadx/releases/download/v1.1.0/jadx-1.1.0.zip"
+		with closing(urlopen(exter)) as jadx:
+			with ZipFile(io.BytesIO(jadx.read())) as zfile:
+				zfile.extractall(self.main_dir + "/../jadx")
+		os.chmod(self.jadx, 33268)
+		return
+
+	def writeln(self, message, color):
+		print("%s%s%s" % (color, message, colors.ENDC))
+
 	def integrity(self):
-		if find_executable("apktool") is None:
-			exit(colors.WARNING + "Can't find 'apktool'. Please see https://ibotpeaches.github.io/Apktool/install/" + colors.ENDC)
+		if os.path.exists(self.jadx) is False:
+			self.writeln("Can't find jadx binary. Downloading...\n", colors.WARNING)
+			self.dependencies()
 		if os.path.isfile(self.file) is True:
 			try:
 				global apk
 				apk = self.apk_info()
 			except Exception as e:
-				exit(colors.WARNING + str(e) + colors.ENDC)
+				exit(self.writeln(str(e), colors.WARNING))
 			else:
 				return apk
 		else:
-			exit(colors.WARNING + "It's not a valid file!" + colors.ENDC)
+			exit(self.writeln("It's not a valid file!", colors.WARNING))
 
 	def decompile(self):
-		out = tempfile.mkdtemp(prefix=self.prefix)
-		print("%s** Decompiling APK...%s" % (colors.OKBLUE, colors.ENDC))
-		os.system("apktool d %s --no-assets -nc -fro %s" % (self.file, out))
-		return out
+		global tempdir
+		tempdir = tempfile.mkdtemp(prefix=self.prefix)
+		self.writeln("** Decompiling APK...", colors.OKBLUE)
+		with ZipFile(self.file) as zipped:
+			dex = tempdir + "/" + apk.get_package() + ".dex"
+			with open(dex, "wb") as classes:
+				classes.write(zipped.read("classes.dex"))
+		dec = "%s %s -ds %s" % (self.jadx, dex, tempdir)
+		os.system(dec)
+		return tempdir
 
 	def unique(self, list): 
 	    x = numpy.array(list) 
@@ -60,16 +85,16 @@ class apkleaks:
 							found.append(mo.group())
 		return self.unique(found)
 
-	def scanning(self, path):
-		print("%s\n** Scanning against '%s' (v%s)%s" % (colors.OKBLUE, apk.get_package(), apk.get_androidversion_name(), colors.ENDC))
+	def scanning(self):
+		self.writeln("\n** Scanning against '%s' (v%s)" % (apk.get_package(), apk.get_androidversion_name()), colors.OKBLUE)
 		with open(self.pattern) as regexes:
 			regex = json.load(regexes)
 			for name, pattern in regex.items():
-				found = self.finder(pattern, path)
+				found = self.finder(pattern, tempdir)
 				output = open(self.output, "a+")
 				if len(found):
 					stdout = ("[%s]" % (name))
-					print("%s\n%s%s" % (colors.OKGREEN, stdout, colors.ENDC))
+					self.writeln("\n" + stdout, colors.OKGREEN)
 					output.write(stdout + "\n")
 					for secret in found:
 						if name == "LinkFinder" and re.match(r"^.L[a-z].+\/.+", secret) is not None:
@@ -80,3 +105,4 @@ class apkleaks:
 					output.write("\n")
 				output.close()
 		print("%s\n** Results saved into '%s%s%s%s'%s" % (colors.OKBLUE, colors.ENDC, colors.OKGREEN, self.output, colors.OKBLUE, colors.ENDC))
+		shutil.rmtree(tempdir)

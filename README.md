@@ -4,7 +4,7 @@
 
 Scanning APK file for URIs, endpoints & secrets.
 
-![apkleaks-PoC](https://user-images.githubusercontent.com/25837540/83264429-41686000-a1ea-11ea-877b-e48da62c59d1.png)
+![apkleaks PoC](https://user-images.githubusercontent.com/25837540/83319953-c3996880-a26c-11ea-982c-c20a343019db.png)
 
 ---
 
@@ -28,8 +28,6 @@ $ git clone https://github.com/dwisiswant0/apkleaks
 Or download at [release](https://github.com/dwisiswant0/apkleaks/releases/) tab.
 
 ### Dependencies
-
-Make sure you've installed `apktool` on your machine. Read here about [how to install](https://ibotpeaches.github.io/Apktool/install/) it.
 
 Install global packages & requirements,
 
@@ -78,7 +76,7 @@ $ python apkleaks.py -f /path/to/file.apk -c rules.json -o ~/Documents/apkleaks-
 
 ### Version
 
-Current version is `v0.3.2-beta`, and still development.
+Current version is `v0.4.1-dev`, and still development.
 
 
 ### Legal
@@ -97,5 +95,5 @@ Since this tool includes some contributions, and I'm not an asshole, I'll public
 - [@ndelphit](https://github.com/ndelphit) - for his inspiring `apkurlgrep`, that's why this tool was made.
 - [@dxa4481](https://github.com/dxa4481) and y'all who contribute to `truffleHogRegexes`.
 - [@GerbenJavado](https://github.com/GerbenJavado) & [@Bankde](https://github.com/Bankde) - for awesome pattern to discover URLs, endpoints & their parameters from `LinkFinder`.
-- [@iBotPeaches](https://github.com/iBotPeaches) - for his APK dissambler tool called `apktool`.
+- [@pxb1988](https://github.com/pxb1988) - for awesome APK dissambler `dex2jar`.
 - [@ph4r05](https://github.com/ph4r05) for standalone APK parser.
