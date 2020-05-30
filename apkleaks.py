@@ -3,7 +3,6 @@ from apkleaks.apkleaks import apkleaks
 from apkleaks.colors import colors
 import argparse
 import os
-import shutil
 
 def header():
 	VERSION = open(os.path.dirname(os.path.realpath(__file__)) + "/VERSION", "r").read()
@@ -23,6 +22,5 @@ if __name__ == "__main__":
 	args = argument()
 	init = apkleaks(args)
 	apk = init.integrity()
-	out = init.decompile()
-	init.scanning(out)
-	shutil.rmtree(out)
+	init.decompile()
+	init.scanning()
