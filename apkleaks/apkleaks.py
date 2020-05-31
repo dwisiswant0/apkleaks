@@ -43,26 +43,24 @@ class apkleaks:
 			self.dependencies()
 		if os.path.isfile(self.file) is True:
 			try:
-				global apk
-				apk = self.apk_info()
+				self.apk = self.apk_info()
 			except Exception as e:
 				exit(self.writeln(str(e), colors.WARNING))
 			else:
-				return apk
+				return self.apk
 		else:
 			exit(self.writeln("It's not a valid file!", colors.WARNING))
 
 	def decompile(self):
-		global tempdir
-		tempdir = tempfile.mkdtemp(prefix=self.prefix)
+		self.tempdir = tempfile.mkdtemp(prefix=self.prefix)
 		self.writeln("** Decompiling APK...", colors.OKBLUE)
 		with ZipFile(self.file) as zipped:
-			dex = tempdir + "/" + apk.get_package() + ".dex"
+			dex = self.tempdir + "/" + self.apk.get_package() + ".dex"
 			with open(dex, "wb") as classes:
 				classes.write(zipped.read("classes.dex"))
-		dec = "%s %s -ds %s" % (self.jadx, dex, tempdir)
+		dec = "%s %s -ds %s" % (self.jadx, dex, self.tempdir)
 		os.system(dec)
-		return tempdir
+		return self.tempdir
 
 	def unique(self, list): 
 	    x = numpy.array(list) 
@@ -85,24 +83,30 @@ class apkleaks:
 							found.append(mo.group())
 		return self.unique(found)
 
+	def extract(self, name, matches):
+		output = open(self.output, "a+")
+		if len(matches):
+			stdout = ("[%s]" % (name))
+			self.writeln("\n" + stdout, colors.OKGREEN)
+			output.write(stdout + "\n")
+			for secret in matches:
+				if name == "LinkFinder" and re.match(r"^.L[a-z].+\/.+", secret) is not None:
+					continue
+				stdout = ("- %s" % (secret))
+				print(stdout)
+				output.write(stdout + "\n")
+			output.write("\n")
+		output.close()
+
 	def scanning(self):
-		self.writeln("\n** Scanning against '%s' (v%s)" % (apk.get_package(), apk.get_androidversion_name()), colors.OKBLUE)
+		self.writeln("\n** Scanning against '%s' (v%s)" % (self.apk.get_package(), self.apk.get_androidversion_name()), colors.OKBLUE)
 		with open(self.pattern) as regexes:
 			regex = json.load(regexes)
 			for name, pattern in regex.items():
-				found = self.finder(pattern, tempdir)
-				output = open(self.output, "a+")
-				if len(found):
-					stdout = ("[%s]" % (name))
-					self.writeln("\n" + stdout, colors.OKGREEN)
-					output.write(stdout + "\n")
-					for secret in found:
-						if name == "LinkFinder" and re.match(r"^.L[a-z].+\/.+", secret) is not None:
-							continue
-						stdout = ("- %s" % (secret))
-						print(stdout)
-						output.write(stdout + "\n")
-					output.write("\n")
-				output.close()
+				if isinstance(pattern, list):
+					for pattern in pattern:
+						self.extract(name, self.finder(pattern, self.tempdir))
+				else:
+					self.extract(name, self.finder(pattern, self.tempdir))
 		print("%s\n** Results saved into '%s%s%s%s'%s" % (colors.OKBLUE, colors.ENDC, colors.OKGREEN, self.output, colors.OKBLUE, colors.ENDC))
-		shutil.rmtree(tempdir)
+		shutil.rmtree(self.tempdir)
