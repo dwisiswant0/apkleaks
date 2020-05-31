@@ -14,7 +14,7 @@
 	"AWS API Key": "AKIA[0-9A-Z]{16}",
 	"Facebook Access Token": "EAACEdEose0cBA[0-9A-Za-z]+",
 	"Facebook OAuth": "[f|F][a|A][c|C][e|E][b|B][o|O][o|O][k|K].*['|\"][0-9a-f]{32}['|\"]",
-	"Firebase": ".*\\.firebase\\.io",
+	"Firebase": "[a-z0-9.-]+\\.firebase\\.io",
 	"GitHub": "[g|G][i|I][t|T][h|H][u|U][b|B].*['|\"][0-9a-zA-Z]{35,40}['|\"]",
 	"Generic API Key": "[a|A][p|P][i|I][_]?[k|K][e|E][y|Y].*['|\"][0-9a-zA-Z]{32,45}['|\"]",
 	"Generic Secret": "[s|S][e|E][c|C][r|R][e|E][t|T].*['|\"][0-9a-zA-Z]{32,45}['|\"]",
