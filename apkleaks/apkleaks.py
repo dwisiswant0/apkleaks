@@ -13,6 +13,7 @@ import re
 import shutil
 import stat
 import tempfile
+import threading
 
 class apkleaks:
 	def __init__(self, args):
@@ -55,9 +56,12 @@ class apkleaks:
 		self.tempdir = tempfile.mkdtemp(prefix=self.prefix)
 		self.writeln("** Decompiling APK...", colors.OKBLUE)
 		with ZipFile(self.file) as zipped:
-			dex = self.tempdir + "/" + self.apk.get_package() + ".dex"
-			with open(dex, "wb") as classes:
-				classes.write(zipped.read("classes.dex"))
+			try:
+				dex = self.tempdir + "/" + self.apk.get_package() + ".dex"
+				with open(dex, "wb") as classes:
+					classes.write(zipped.read("classes.dex"))
+			except Exception as e:
+				exit(self.writeln(str(e), colors.WARNING))
 		dec = "%s %s -ds %s" % (self.jadx, dex, self.tempdir)
 		os.system(dec)
 		return self.tempdir
@@ -90,7 +94,7 @@ class apkleaks:
 			self.writeln("\n" + stdout, colors.OKGREEN)
 			output.write(stdout + "\n")
 			for secret in matches:
-				if name == "LinkFinder" and re.match(r"^.L[a-z].+\/.+", secret) is not None:
+				if name == "LinkFinder" and re.match(r"^.(L[a-z]|application|audio|cordova|fonts|image|kotlin|layout|multipart|res|text|video).*\/.+", secret) is not None:
 					continue
 				stdout = ("- %s" % (secret))
 				print(stdout)
@@ -99,14 +103,16 @@ class apkleaks:
 		output.close()
 
 	def scanning(self):
-		self.writeln("\n** Scanning against '%s' (v%s)" % (self.apk.get_package(), self.apk.get_androidversion_name()), colors.OKBLUE)
+		self.writeln("\n** Scanning against '%s'" % (self.apk.get_package()), colors.OKBLUE)
 		with open(self.pattern) as regexes:
 			regex = json.load(regexes)
 			for name, pattern in regex.items():
 				if isinstance(pattern, list):
 					for pattern in pattern:
-						self.extract(name, self.finder(pattern, self.tempdir))
+						thread = threading.Thread(target = self.extract, args = (name, self.finder(pattern, self.tempdir)))
+						thread.start()
 				else:
-					self.extract(name, self.finder(pattern, self.tempdir))
+					thread = threading.Thread(target = self.extract, args = (name, self.finder(pattern, self.tempdir)))
+					thread.start()
 		print("%s\n** Results saved into '%s%s%s%s'%s" % (colors.OKBLUE, colors.ENDC, colors.OKGREEN, self.output, colors.OKBLUE, colors.ENDC))
 		shutil.rmtree(self.tempdir)
