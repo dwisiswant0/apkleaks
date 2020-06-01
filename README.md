@@ -23,28 +23,36 @@ To install **apkLeaks**, simply:
 
 ```
 $ git clone https://github.com/dwisiswant0/apkleaks
+$ cd apkleaks/
+$ pip install -r requirements.txt
 ```
 
 Or download at [release](https://github.com/dwisiswant0/apkleaks/releases/) tab.
 
 ### Dependencies
-⚠️ This package works in Python2 (not Python3).
+
+⚠️ This package works in Python2 _(not Python3)_.
 
 Install global packages & requirements:
+
 #### Linux
+
 ```bash
 $ sudo apt-get install libssl-dev swig -y
-$ sudo pip install -r requirements.txt
 ```
-#### OSX
-```
-$ # using Homebrew
-$ # skip if already installed
-$ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 
-$ brew install openssl swig
-$ pip install -r requirements.txt
+#### OSX
+
 ```
+$ brew install openssl swig
+```
+
+#### Windows
+
+You need to install:
+
+- [OpenSSL](https://wiki.openssl.org/index.php/Binaries), and
+- [swig-win](https://sourceforge.net/projects/swig/files/).
 
 ### Usage
 
