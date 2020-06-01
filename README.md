@@ -28,12 +28,22 @@ $ git clone https://github.com/dwisiswant0/apkleaks
 Or download at [release](https://github.com/dwisiswant0/apkleaks/releases/) tab.
 
 ### Dependencies
+⚠️ This package works in Python2 (not Python3).
 
-Install global packages & requirements,
-
-```
+Install global packages & requirements:
+#### Linux
+```bash
 $ sudo apt-get install libssl-dev swig -y
 $ sudo pip install -r requirements.txt
+```
+#### OSX
+```
+$ # using Homebrew
+$ # skip if already installed
+$ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+
+$ brew install openssl swig
+$ pip install -r requirements.txt
 ```
 
 ### Usage
