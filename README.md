@@ -10,6 +10,9 @@ Scanning APK file for URIs, endpoints & secrets.
 
 - [Installation](#installation)
 - [Dependencies](#dependencies)
+    - [Linux](#linux)
+    - [OSX](#osx)
+    - [Windows](#windows)
 - [Usage](#usage)
 - [Version](#version)
 - [Legal](#legal)
@@ -31,7 +34,7 @@ Or download at [release](https://github.com/dwisiswant0/apkleaks/releases/) tab.
 
 ### Dependencies
 
-`⚠️ This package works in Python2 _(not Python3)_.`
+⚠️ This package works in Python2 _(not Python3)_.
 
 Install global packages:
 
