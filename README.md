@@ -31,9 +31,9 @@ Or download at [release](https://github.com/dwisiswant0/apkleaks/releases/) tab.
 
 ### Dependencies
 
-⚠️ This package works in Python2 _(not Python3)_.
+`⚠️ This package works in Python2 _(not Python3)_.`
 
-Install global packages & requirements:
+Install global packages:
 
 #### Linux
 
