@@ -41,7 +41,7 @@ Install global packages:
 #### Linux
 
 ```bash
-$ sudo apt-get install libssl-dev swig -y
+$ sudo apt-get install libssl-dev swig python-setuptools python2-dev -y
 ```
 
 #### OSX
