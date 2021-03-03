@@ -72,7 +72,7 @@ Current version is `v2.0.0`, and still development.
 
 ## Legal
 
-`apkleaks` is distributed under MIT.
+`apkleaks` is distributed under Apache 2.
 
 ## Acknowledments
 
