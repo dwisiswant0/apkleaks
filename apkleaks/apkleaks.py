@@ -116,4 +116,6 @@ class APKLeaks:
 					thread = threading.Thread(target = self.extract, args = (name, self.finder(pattern, self.tempdir)))
 					thread.start()
 		print("%s\n** Results saved into '%s%s%s%s'%s" % (clr.OKBLUE, clr.ENDC, clr.OKGREEN, self.output, clr.OKBLUE, clr.ENDC))
+
+	def __del__(self):
 		shutil.rmtree(self.tempdir)

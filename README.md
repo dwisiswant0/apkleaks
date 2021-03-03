@@ -68,7 +68,7 @@ $ python apkleaks.py -f /path/to/file.apk -p rules.json -o ~/Documents/apkleaks-
 
 ## Version
 
-Current version is `v2.0.0`, and still development.
+Current version is `v2.0.1`, and still development.
 
 ## Legal
 
