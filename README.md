@@ -4,19 +4,15 @@
 
 Scanning APK file for URIs, endpoints & secrets.
 
-![apkleaks PoC](https://user-images.githubusercontent.com/25837540/83319953-c3996880-a26c-11ea-982c-c20a343019db.png)
+![apkleaks PoC](https://user-images.githubusercontent.com/25837540/109804969-7613b700-7c55-11eb-8f6c-bacce0d1250e.png)
 
 ---
 
 - [Installation](#installation)
-- [Dependencies](#dependencies)
-    - [Linux](#linux)
-    - [OSX](#osx)
-    - [Windows](#windows)
 - [Usage](#usage)
 - [Version](#version)
 - [Legal](#legal)
-- [Credits and Thanks](#credits-and-thanks)
+- [Acknowledments](#credits-and-thanks)
 
 ---
 
@@ -30,36 +26,9 @@ $ cd apkleaks/
 $ pip install -r requirements.txt
 ```
 
-Or download at [release](https://github.com/dwisiswant0/apkleaks/releases/) tab.
-
-### Dependencies
-
-⚠️ This package works in Python2 _(not Python3)_.
-
-Install global packages:
-
-#### Linux
-
-```bash
-$ sudo apt-get install libssl-dev swig python-setuptools python2-dev -y
-```
-
-#### OSX
-
-```
-$ brew install openssl swig
-```
-
-#### Windows
-
-You need to install:
-
-- [OpenSSL](https://wiki.openssl.org/index.php/Binaries), and
-- [swig-win](https://sourceforge.net/projects/swig/files/).
-
 ### Usage
 
-Basically,
+It's fairly simple,
 ```
 $ python apkleaks.py -f ~/path/to/file.apk
 ```
@@ -92,30 +61,25 @@ Custom patterns can be added with the following flag `--pattern /path/to/rules.j
 ```
 
 ```
-$ python apkleaks.py -f /path/to/file.apk -c rules.json -o ~/Documents/apkleaks-resuts.txt
+$ python apkleaks.py -f /path/to/file.apk -p rules.json -o ~/Documents/apkleaks-resuts.txt
 ```
 
 ### Version
 
-Current version is `v1.0.2`, and still development.
-
+Current version is `v2.0.0`, and still development.
 
 ### Legal
 
-This tool can be freely copied, modified, altered, distributed without any attribution whatsoever. However, if you feel like this tool deserves an attribution, mention it. It won't hurt anybody :)
+`apkleaks` is distributed under MIT.
 
-[![Twitter Follow](https://img.shields.io/twitter/follow/dwisiswant0.svg?style=social)](https://twitter.com/dwisiswant0)
+### Acknowledments
 
-Please, read the [license terms](https://github.com/dwisiswant0/apkleaks/blob/master/LICENSE). Don't worry, it can be read in less than 30 seconds, unless you have some sort of reading disability - in that case, I'm wondering why you're still reading this text. Really. Stop. Please. I mean, seriously. Why are you still reading?
-
-
-### Credits and Thanks
-
-Since this tool includes some contributions, and I'm not an asshole, I'll publically thank the following users for their help and resource:
+Since this tool includes some contributions, and I'm not an asshole, I'll publically thank the following users for their helps and resources:
 
 - [@ndelphit](https://github.com/ndelphit) - for his inspiring `apkurlgrep`, that's why this tool was made.
 - [@dxa4481](https://github.com/dxa4481) and y'all who contribute to `truffleHogRegexes`.
 - [@GerbenJavado](https://github.com/GerbenJavado) & [@Bankde](https://github.com/Bankde) - for awesome pattern to discover URLs, endpoints & their parameters from `LinkFinder`.
 - [@tomnomnom](https://github.com/tomnomnom/gf) - a `gf` patterns.
 - [@pxb1988](https://github.com/pxb1988) - for awesome APK dissambler `dex2jar`.
-- [@ph4r05](https://github.com/ph4r05) for standalone APK parser.
+- [@subho007](https://github.com/ph4r05) for standalone APK parser.
+- `SHA2048#4361` (Discord) that help me porting to Python3.
