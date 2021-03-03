@@ -50,7 +50,9 @@ optional arguments:
 
 In general, if you don't provide `-o` argument, then it will generate results file automatically.
 
-Custom patterns can be added with the following flag `--pattern /path/to/rules.json` to provide sensitive _search rules_ in the JSON file format. For example,
+Custom patterns can be added with the following flag `--pattern /path/to/rules.json` to provide sensitive _search rules_ in the JSON file format. If not set, it'll use default patterns from [regexes.json](https://github.com/dwisiswant0/apkleaks/blob/dev/config/regexes.json) file.
+
+Example patterns file:
 
 ```json
 // rules.json
