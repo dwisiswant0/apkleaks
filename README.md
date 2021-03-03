@@ -1,4 +1,4 @@
-## apkLeaks
+# apkLeaks
 [![version](https://badge.fury.io/gh/dwisiswant0%2fapkleaks.svg)](https://badge.fury.io/gh/dwisiswant0%2fapkleaks.svg)
 [![contributions](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dwisiswant0/apkleaks/issues)
 
@@ -16,7 +16,7 @@ Scanning APK file for URIs, endpoints & secrets.
 
 ---
 
-### Installation
+## Installation
 
 To install **apkLeaks**, simply:
 
@@ -26,14 +26,14 @@ $ cd apkleaks/
 $ pip install -r requirements.txt
 ```
 
-### Usage
+## Usage
 
 It's fairly simple,
 ```
 $ python apkleaks.py -f ~/path/to/file.apk
 ```
 
-#### Options
+### Options
 
 ```
 usage: apkleaks [-h] -f FILE [-o OUTPUT] [-p PATTERN]
@@ -66,15 +66,15 @@ Example patterns file:
 $ python apkleaks.py -f /path/to/file.apk -p rules.json -o ~/Documents/apkleaks-resuts.txt
 ```
 
-### Version
+## Version
 
 Current version is `v2.0.0`, and still development.
 
-### Legal
+## Legal
 
 `apkleaks` is distributed under MIT.
 
-### Acknowledments
+## Acknowledments
 
 Since this tool includes some contributions, and I'm not an asshole, I'll publically thank the following users for their helps and resources:
 
@@ -84,4 +84,4 @@ Since this tool includes some contributions, and I'm not an asshole, I'll public
 - [@tomnomnom](https://github.com/tomnomnom/gf) - a `gf` patterns.
 - [@pxb1988](https://github.com/pxb1988) - for awesome APK dissambler `dex2jar`.
 - [@subho007](https://github.com/ph4r05) for standalone APK parser.
-- `SHA2048#4361` (Discord) that help me porting to Python3.
+- `SHA2048#4361` _(Discord user)_ that help me porting code to Python3.
