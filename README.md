@@ -4,7 +4,7 @@
 
 Scanning APK file for URIs, endpoints & secrets.
 
-![apkleaks PoC](https://user-images.githubusercontent.com/25837540/109804969-7613b700-7c55-11eb-8f6c-bacce0d1250e.png)
+<img src="https://user-images.githubusercontent.com/25837540/109905459-6934a900-7cd1-11eb-8e38-d43f5c9cb696.png" alt="APKLeaks" height="400">
 
 ---
 
@@ -18,24 +18,25 @@ Scanning APK file for URIs, endpoints & secrets.
 
 ## Installation
 
-To install **apkLeaks**, simply:
+To install **APKLeaks**, simply:
 
 ```
 $ git clone https://github.com/dwisiswant0/apkleaks
 $ cd apkleaks/
-$ pip install -r requirements.txt
+$ pip3 install -r requirements.txt
 ```
 
 ## Usage
 
 It's fairly simple,
 ```
-$ python apkleaks.py -f ~/path/to/file.apk
+$ python3 apkleaks.py -f ~/path/to/file.apk
 ```
 
 ### Options
 
-```
+```console
+$ python3 apkleaks.py -h
 usage: apkleaks [-h] -f FILE [-o OUTPUT] [-p PATTERN]
 
 optional arguments:
@@ -50,7 +51,7 @@ optional arguments:
 
 In general, if you don't provide `-o` argument, then it will generate results file automatically.
 
-Custom patterns can be added with the following flag `--pattern /path/to/rules.json` to provide sensitive _search rules_ in the JSON file format. If not set, it'll use default patterns from [regexes.json](https://github.com/dwisiswant0/apkleaks/blob/dev/config/regexes.json) file.
+Custom patterns can be added with the following flag `--pattern /path/to/rules.json` to provide sensitive _search rules_ in the JSON file format. If not set, it'll use default patterns from [regexes.json](https://github.com/dwisiswant0/apkleaks/blob/master/config/regexes.json) file.
 
 Example patterns file:
 
@@ -63,7 +64,7 @@ Example patterns file:
 ```
 
 ```
-$ python apkleaks.py -f /path/to/file.apk -p rules.json -o ~/Documents/apkleaks-resuts.txt
+$ python apkleaks.py -f /path/to/file.apk -p rules.json -o ~/Documents/apkleaks-results.txt
 ```
 
 ## Version
