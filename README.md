@@ -26,6 +26,10 @@ $ cd apkleaks/
 $ pip3 install -r requirements.txt
 ```
 
+### Dependencies
+
+APKLeaks using [jadx](https://github.com/skylot/jadx) dissambler to decompile APK file. If it doesn't exist in your environment, it'll ask you to download or nah.
+
 ## Usage
 
 It's fairly simple,
@@ -69,7 +73,7 @@ $ python apkleaks.py -f /path/to/file.apk -p rules.json -o ~/Documents/apkleaks-
 
 ## Version
 
-Current version is `v2.0.1`, and still development.
+Current version is `v2.0.2`, and still development.
 
 ## Legal
 
