@@ -14,6 +14,7 @@ import os
 import re
 import shutil
 import stat
+import sys
 import tempfile
 import threading
 
@@ -21,6 +22,7 @@ class APKLeaks:
 	def __init__(self, args):
 		self.file = args.file
 		self.prefix = "apkleaks-"
+		self.tempdir = tempfile.mkdtemp(prefix=self.prefix)
 		self.main_dir = os.path.dirname(os.path.realpath(__file__))
 		self.output = tempfile.mkstemp(suffix=".txt", prefix=self.prefix)[1] if args.output is None else args.output
 		self.pattern = self.main_dir + "/../config/regexes.json" if args.pattern is None else args.pattern
@@ -31,20 +33,40 @@ class APKLeaks:
 		return APK(self.file)
 
 	def dependencies(self):
-		exter = "https://github.com/skylot/jadx/releases/download/v1.1.0/jadx-1.1.0.zip"
+		exter = "https://github.com/skylot/jadx/releases/download/v1.2.0/jadx-1.2.0.zip"
 		with closing(urlopen(exter)) as jadx:
 			with ZipFile(io.BytesIO(jadx.read())) as zfile:
 				zfile.extractall(self.main_dir + "/../jadx")
 		os.chmod(self.jadx, 33268)
 		return
 
+	def write(self, message, color):
+		sys.stdout.write("%s%s%s" % (color, message, clr.ENDC))
+
 	def writeln(self, message, color):
-		print("%s%s%s" % (color, message, clr.ENDC))
+		self.write(message + "\n", color)
 
 	def integrity(self):
 		if os.path.exists(self.jadx) is False:
-			self.writeln("Can't find jadx binary. Downloading...\n", clr.WARNING)
-			self.dependencies()
+			self.writeln("Can't find jadx binary.", clr.WARNING)
+			valid = {"yes": True, "y": True, "ye": True, "no": False, "n": False}
+			while True:
+				self.write("Do you want to download jadx? (Y/n) ", clr.OKBLUE)
+				choice = input().lower()
+				if choice == "":
+					choice = valid["y"]
+					break
+				elif choice in valid:
+					choice = valid[choice]
+					break
+				else:
+					self.writeln("\nPlease respond with 'yes' or 'no' (or 'y' or 'n').", clr.WARNING)
+			if choice:
+				self.writeln("** Downloading jadx...\n", clr.OKBLUE)
+				self.dependencies()
+			else:
+				exit(self.writeln("Aborted.", clr.FAIL))
+
 		if os.path.isfile(self.file) is True:
 			try:
 				self.apk = self.apk_info()
@@ -56,7 +78,6 @@ class APKLeaks:
 			exit(self.writeln("It's not a valid file!", clr.WARNING))
 
 	def decompile(self):
-		self.tempdir = tempfile.mkdtemp(prefix=self.prefix)
 		self.writeln("** Decompiling APK...", clr.OKBLUE)
 		with ZipFile(self.file) as zipped:
 			try:
@@ -70,8 +91,8 @@ class APKLeaks:
 		return self.tempdir
 
 	def unique(self, list): 
-	    x = numpy.array(list) 
-	    return (numpy.unique(x))
+		x = numpy.array(list) 
+		return (numpy.unique(x))
 
 	def finder(self, pattern, path):
 		matcher = re.compile(pattern)
@@ -118,4 +139,7 @@ class APKLeaks:
 		print("%s\n** Results saved into '%s%s%s%s'%s" % (clr.OKBLUE, clr.ENDC, clr.OKGREEN, self.output, clr.OKBLUE, clr.ENDC))
 
 	def __del__(self):
-		shutil.rmtree(self.tempdir)
+		try:
+			shutil.rmtree(self.tempdir)
+		except Exception:
+			return
