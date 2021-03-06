@@ -86,7 +86,7 @@ class APKLeaks:
 					classes.write(zipped.read("classes.dex"))
 			except Exception as e:
 				exit(self.writeln(str(e), clr.WARNING))
-		dec = "%s %s -d %s --deobf" % (self.jadx, dex, self.tempdir)
+		dec = "%s %s -d %s -j %s --deobf" % (self.jadx, dex, self.tempdir, 10)
 		os.system(dec)
 		return self.tempdir
 
