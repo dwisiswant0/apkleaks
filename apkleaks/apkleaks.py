@@ -116,7 +116,7 @@ class APKLeaks:
 			self.writeln("\n" + stdout, clr.OKGREEN)
 			output.write(stdout + "\n")
 			for secret in matches:
-				if name == "LinkFinder" and re.match(r"^.(L[a-z]|application|audio|cordova|fonts|image|kotlin|layout|multipart|plain|res|text|video).*\/.+", secret) is not None:
+				if name == "LinkFinder" and re.match(r"^.(L[a-z]|application|audio|fonts|image|layout|multipart|plain|text|video).*\/.+", secret) is not None:
 					continue
 				stdout = ("- %s" % (secret))
 				print(stdout)
