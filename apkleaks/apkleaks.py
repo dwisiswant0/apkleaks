@@ -13,7 +13,6 @@ import numpy
 import os
 import re
 import shutil
-import stat
 import sys
 import tempfile
 import threading
@@ -38,7 +37,6 @@ class APKLeaks:
 			with ZipFile(io.BytesIO(jadx.read())) as zfile:
 				zfile.extractall(self.main_dir + "/../jadx")
 		os.chmod(self.jadx, 33268)
-		return
 
 	def write(self, message, color):
 		sys.stdout.write("%s%s%s" % (color, message, clr.ENDC))
@@ -65,17 +63,17 @@ class APKLeaks:
 				self.writeln("** Downloading jadx...\n", clr.OKBLUE)
 				self.dependencies()
 			else:
-				exit(self.writeln("Aborted.", clr.FAIL))
+				sys.exit(self.writeln("Aborted.", clr.FAIL))
 
 		if os.path.isfile(self.file) is True:
 			try:
 				self.apk = self.apk_info()
 			except Exception as e:
-				exit(self.writeln(str(e), clr.WARNING))
+				sys.exit(self.writeln(str(e), clr.WARNING))
 			else:
 				return self.apk
 		else:
-			exit(self.writeln("It's not a valid file!", clr.WARNING))
+			sys.exit(self.writeln("It's not a valid file!", clr.WARNING))
 
 	def decompile(self):
 		self.writeln("** Decompiling APK...", clr.OKBLUE)
@@ -85,8 +83,13 @@ class APKLeaks:
 				with open(dex, "wb") as classes:
 					classes.write(zipped.read("classes.dex"))
 			except Exception as e:
+<<<<<<< HEAD
 				exit(self.writeln(str(e), clr.WARNING))
 		dec = "%s %s -d %s -j %s --deobf" % (self.jadx, dex, self.tempdir, 10)
+=======
+				sys.exit(self.writeln(str(e), clr.WARNING))
+		dec = "%s %s -d %s --deobf" % (self.jadx, dex, self.tempdir)
+>>>>>>> f2f894c (Refactor code quality issues)
 		os.system(dec)
 		return self.tempdir
 
@@ -111,7 +114,7 @@ class APKLeaks:
 
 	def extract(self, name, matches):
 		output = open(self.output, "a+")
-		if len(matches):
+		if matches:
 			stdout = ("[%s]" % (name))
 			self.writeln("\n" + stdout, clr.OKGREEN)
 			output.write(stdout + "\n")
