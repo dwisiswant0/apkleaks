@@ -71,6 +71,10 @@ Example patterns file:
 $ python apkleaks.py -f /path/to/file.apk -p rules.json -o ~/Documents/apkleaks-results.txt
 ```
 
+## Known Bugs
+
+- Unable to scans on Windows.
+
 ## Version
 
 Current version is `v2.0.3`, and still development.
