@@ -2,6 +2,7 @@
 from apkleaks.colors import clr
 from contextlib import closing
 from distutils.spawn import find_executable
+from pipes import quote
 from pyaxmlparser import APK
 from urllib.request import urlopen
 from zipfile import ZipFile
@@ -84,8 +85,9 @@ class APKLeaks:
 					classes.write(zipped.read("classes.dex"))
 			except Exception as e:
 				sys.exit(self.writeln(str(e), clr.WARNING))
-		dec = "%s %s -d %s --deobf" % (self.jadx, dex, self.tempdir)
-		os.system(dec)
+		args = [self.jadx, dex, "-d", self.tempdir, "--deobf"]
+		comm = "%s" % (" ".join(quote(arg) for arg in args))
+		os.system(comm)
 		return self.tempdir
 
 	def unique(self, list): 
