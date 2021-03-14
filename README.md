@@ -93,4 +93,5 @@ Since this tool includes some contributions, and I'm not an asshole, I'll public
 - [@tomnomnom](https://github.com/tomnomnom/gf) - a `gf` patterns.
 - [@pxb1988](https://github.com/pxb1988) - for awesome APK dissambler `dex2jar`.
 - [@subho007](https://github.com/ph4r05) for standalone APK parser.
+- [@Ry0taK](https://github.com/Ry0taK) because he had reported an OS command injection bug. <!-- TODO: Hyperlink to security advisory -->
 - `SHA2048#4361` _(Discord user)_ that help me porting code to Python3.
