@@ -34,10 +34,13 @@ class APKLeaks:
 
 	def dependencies(self):
 		exter = "https://github.com/skylot/jadx/releases/download/v1.2.0/jadx-1.2.0.zip"
-		with closing(urlopen(exter)) as jadx:
-			with ZipFile(io.BytesIO(jadx.read())) as zfile:
-				zfile.extractall(self.main_dir + "/../jadx")
-		os.chmod(self.jadx, 33268)
+		try:
+			with closing(urlopen(exter)) as jadx:
+				with ZipFile(io.BytesIO(jadx.read())) as zfile:
+					zfile.extractall(self.main_dir + "/../jadx")
+			os.chmod(self.jadx, 33268)
+		except Exception as e:
+			sys.exit(self.writeln(str(e), clr.WARNING))
 
 	def write(self, message, color):
 		sys.stdout.write("%s%s%s" % (color, message, clr.ENDC))
