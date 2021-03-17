@@ -144,7 +144,10 @@ class APKLeaks:
 
 	def __del__(self):
 		if self.scanned == True:
-			print("%s\n** Results saved into '%s%s%s%s'%s" % (clr.OKBLUE, clr.ENDC, clr.OKGREEN, self.output, clr.OKBLUE, clr.ENDC))
+			print("%s\n** Results saved into '%s%s%s%s'%s." % (clr.HEADER, clr.ENDC, clr.OKGREEN, self.output, clr.HEADER, clr.ENDC))
+		else:
+			self.writeln("\n** Done with nothing. ¯\\_(ツ)_/¯", clr.WARNING)
+
 		try:
 			shutil.rmtree(self.tempdir)
 		except Exception:
