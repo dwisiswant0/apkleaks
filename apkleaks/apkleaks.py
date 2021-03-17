@@ -21,12 +21,15 @@ import threading
 class APKLeaks:
 	def __init__(self, args):
 		self.file = args.file
+		self.json = args.json
 		self.prefix = "apkleaks-"
 		self.tempdir = tempfile.mkdtemp(prefix=self.prefix)
 		self.main_dir = os.path.dirname(os.path.realpath(__file__))
-		self.output = tempfile.mkstemp(suffix=".txt", prefix=self.prefix)[1] if args.output is None else args.output
+		self.output = tempfile.mkstemp(suffix=".%s" % ("json" if self.json == True else "txt"), prefix=self.prefix)[1] if args.output is None else args.output
+		self.fileout = open(self.output, "%s" % ("w" if self.json == True else "a"))
 		self.pattern = self.main_dir + "/../config/regexes.json" if args.pattern is None else args.pattern
 		self.jadx = find_executable("jadx") if find_executable("jadx") is not None else self.main_dir + "/../jadx/bin/jadx%s" % (".bat" if os.name == "nt" else "")
+		self.outJSON = {}
 		self.scanned = False
 		logging.config.dictConfig({"version": 1, "disable_existing_loggers": True})
 
@@ -95,7 +98,7 @@ class APKLeaks:
 		return self.tempdir
 
 	def unique(self, list): 
-		x = numpy.array(list) 
+		x = numpy.array(list)
 		return (numpy.unique(x))
 
 	def finder(self, pattern, path):
@@ -114,23 +117,24 @@ class APKLeaks:
 		return self.unique(found)
 
 	def extract(self, name, matches):
-		output = open(self.output, "a+")
 		if len(matches):
 			stdout = ("[%s]" % (name))
 			self.writeln("\n" + stdout, clr.OKGREEN)
-			output.write(stdout + "\n")
+			self.fileout.write("%s" % (stdout + "\n" if self.json == False else ""))
 			for secret in matches:
 				if name == "LinkFinder" and re.match(r"^.(L[a-z]|application|audio|fonts|image|layout|multipart|plain|text|video).*\/.+", secret) is not None:
 					continue
 				stdout = ("- %s" % (secret))
 				print(stdout)
-				output.write(stdout + "\n")
-			output.write("\n")
+				self.fileout.write("%s" % (stdout + "\n" if self.json == False else ""))
+			self.fileout.write("%s" % ("\n" if self.json == False else ""))
+			self.outJSON["results"].append({"name": name, "matches": matches.tolist()})
 			self.scanned = True
-		output.close()
 
 	def scanning(self):
 		self.writeln("\n** Scanning against '%s'" % (self.apk.package), clr.OKBLUE)
+		self.outJSON["package"] = self.apk.package
+		self.outJSON["results"] = []
 		with open(self.pattern) as regexes:
 			regex = json.load(regexes)
 			for name, pattern in regex.items():
@@ -144,8 +148,11 @@ class APKLeaks:
 
 	def __del__(self):
 		if self.scanned == True:
+			self.fileout.write("%s" % (json.dumps(self.outJSON, indent=4) if self.json == True else ""))
+			self.fileout.close()
 			print("%s\n** Results saved into '%s%s%s%s'%s." % (clr.HEADER, clr.ENDC, clr.OKGREEN, self.output, clr.HEADER, clr.ENDC))
 		else:
+			os.remove(self.output)
 			self.writeln("\n** Done with nothing. ¯\\_(ツ)_/¯", clr.WARNING)
 
 		try:

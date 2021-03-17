@@ -11,8 +11,9 @@ def header():
 def argument():
 	parser = argparse.ArgumentParser()
 	parser.add_argument("-f", "--file", help="APK file to scanning", type=str, required=True)
-	parser.add_argument("-o", "--output", help="Write to file results (NULL will be saved into random file)", type=str, required=False)
+	parser.add_argument("-o", "--output", help="Write to file results (random if not set)", type=str, required=False)
 	parser.add_argument("-p", "--pattern", help="Path to custom patterns JSON", type=str, required=False)
+	parser.add_argument("--json", help="Save as JSON format", required=False, action="store_true")
 	arg = parser.parse_args()
 	return arg
 
