@@ -95,7 +95,6 @@ class APKLeaks:
 		args = [self.jadx, dex, "-d", self.tempdir, "--deobf"]
 		comm = "%s" % (" ".join(quote(arg) for arg in args))
 		os.system(comm)
-		return self.tempdir
 
 	def unique(self, list): 
 		x = numpy.array(list)
