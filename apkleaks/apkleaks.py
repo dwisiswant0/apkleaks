@@ -27,6 +27,7 @@ class APKLeaks:
 		self.output = tempfile.mkstemp(suffix=".txt", prefix=self.prefix)[1] if args.output is None else args.output
 		self.pattern = self.main_dir + "/../config/regexes.json" if args.pattern is None else args.pattern
 		self.jadx = find_executable("jadx") if find_executable("jadx") is not None else self.main_dir + "/../jadx/bin/jadx%s" % (".bat" if os.name == "nt" else "")
+		self.scanned = False
 		logging.config.dictConfig({"version": 1, "disable_existing_loggers": True})
 
 	def apk_info(self):
@@ -125,6 +126,7 @@ class APKLeaks:
 				print(stdout)
 				output.write(stdout + "\n")
 			output.write("\n")
+			self.scanned = True
 		output.close()
 
 	def scanning(self):
@@ -141,7 +143,8 @@ class APKLeaks:
 					thread.start()
 
 	def __del__(self):
-		print("%s\n** Results saved into '%s%s%s%s'%s" % (clr.OKBLUE, clr.ENDC, clr.OKGREEN, self.output, clr.OKBLUE, clr.ENDC))
+		if self.scanned == True:
+			print("%s\n** Results saved into '%s%s%s%s'%s" % (clr.OKBLUE, clr.ENDC, clr.OKGREEN, self.output, clr.OKBLUE, clr.ENDC))
 		try:
 			shutil.rmtree(self.tempdir)
 		except Exception:
