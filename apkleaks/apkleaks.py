@@ -139,11 +139,17 @@ class APKLeaks:
 			for name, pattern in regex.items():
 				if isinstance(pattern, list):
 					for pattern in pattern:
+						try:
+							thread = threading.Thread(target = self.extract, args = (name, self.finder(pattern, self.tempdir)))
+							thread.start()
+						except KeyboardInterrupt:
+							sys.exit(self.writeln("\n** Interrupted. Aborting...", clr.FAIL))
+				else:
+					try:
 						thread = threading.Thread(target = self.extract, args = (name, self.finder(pattern, self.tempdir)))
 						thread.start()
-				else:
-					thread = threading.Thread(target = self.extract, args = (name, self.finder(pattern, self.tempdir)))
-					thread.start()
+					except KeyboardInterrupt:
+						sys.exit(self.writeln("\n** Interrupted. Aborting...", clr.FAIL))
 
 	def __del__(self):
 		if self.scanned == True:
