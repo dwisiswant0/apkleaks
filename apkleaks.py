@@ -3,6 +3,7 @@ from apkleaks.apkleaks import APKLeaks
 from apkleaks.colors import clr
 import argparse
 import os
+import sys
 
 def header():
 	VERSION = open(os.path.dirname(os.path.realpath(__file__)) + "/VERSION", "r").read()
@@ -18,8 +19,7 @@ def argument():
 	return arg
 
 if __name__ == "__main__":
-	print(clr.HEADER)
-	print(clr.HEADER + header() + clr.ENDC)
+	print(clr.HEADER + header() + clr.ENDC, file=sys.stderr)
 	args = argument()
 	init = APKLeaks(args)
 	apk = init.integrity()
