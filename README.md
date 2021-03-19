@@ -73,7 +73,7 @@ $ python apkleaks.py -f /path/to/file.apk -p rules.json -o ~/Documents/apkleaks-
 
 ## Known Bugs
 
-- Empty results on Windows (#24).
+- Empty results on Windows ([#24](https://github.com/dwisiswant0/apkleaks/issues/24)).
 
 ## Version
 
