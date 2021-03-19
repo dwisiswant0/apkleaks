@@ -41,16 +41,16 @@ $ python3 apkleaks.py -f ~/path/to/file.apk
 
 ```console
 $ python3 apkleaks.py -h
-usage: apkleaks [-h] -f FILE [-o OUTPUT] [-p PATTERN]
+usage: apkleaks [-h] -f FILE [-o OUTPUT] [-p PATTERN] [--json]
 
 optional arguments:
   -h, --help            show this help message and exit
   -f FILE, --file FILE  APK file to scanning
   -o OUTPUT, --output OUTPUT
-                        Write to file results (NULL will be saved into random
-                        file)
+                        Write to file results (random if not set)
   -p PATTERN, --pattern PATTERN
                         Path to custom patterns JSON
+  --json                Save as JSON format
 ```
 
 In general, if you don't provide `-o` argument, then it will generate results file automatically.
@@ -73,11 +73,11 @@ $ python apkleaks.py -f /path/to/file.apk -p rules.json -o ~/Documents/apkleaks-
 
 ## Known Bugs
 
-- Unable to scans on Windows.
+- Empty results on Windows ([#24](https://github.com/dwisiswant0/apkleaks/issues/24)).
 
 ## Version
 
-Current version is `v2.0.3`, and still development.
+Current version is `v2.0.6`, and still development.
 
 ## Legal
 
@@ -94,3 +94,5 @@ Since this tool includes some contributions, and I'm not an asshole, I'll public
 - [@pxb1988](https://github.com/pxb1988) - for awesome APK dissambler `dex2jar`.
 - [@subho007](https://github.com/ph4r05) for standalone APK parser.
 - `SHA2048#4361` _(Discord user)_ that help me porting code to Python3.
+- [@Ry0taK](https://github.com/Ry0taK) because he had reported an [OS command injection bug](https://github.com/dwisiswant0/apkleaks/security/advisories/GHSA-8434-v7xw-8m9x).
+- [All contributors](https://github.com/dwisiswant0/apkleaks/graphs/contributors).

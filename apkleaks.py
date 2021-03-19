@@ -3,6 +3,7 @@ from apkleaks.apkleaks import APKLeaks
 from apkleaks.colors import clr
 import argparse
 import os
+import sys
 
 def header():
 	VERSION = open(os.path.dirname(os.path.realpath(__file__)) + "/VERSION", "r").read()
@@ -11,14 +12,14 @@ def header():
 def argument():
 	parser = argparse.ArgumentParser()
 	parser.add_argument("-f", "--file", help="APK file to scanning", type=str, required=True)
-	parser.add_argument("-o", "--output", help="Write to file results (NULL will be saved into random file)", type=str, required=False)
+	parser.add_argument("-o", "--output", help="Write to file results (random if not set)", type=str, required=False)
 	parser.add_argument("-p", "--pattern", help="Path to custom patterns JSON", type=str, required=False)
+	parser.add_argument("--json", help="Save as JSON format", required=False, action="store_true")
 	arg = parser.parse_args()
 	return arg
 
 if __name__ == "__main__":
-	print(clr.HEADER)
-	print(clr.HEADER + header() + clr.ENDC)
+	print(clr.HEADER + header() + clr.ENDC, file=sys.stderr)
 	args = argument()
 	init = APKLeaks(args)
 	apk = init.integrity()

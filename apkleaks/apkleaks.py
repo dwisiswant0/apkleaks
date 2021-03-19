@@ -2,6 +2,7 @@
 from apkleaks.colors import clr
 from contextlib import closing
 from distutils.spawn import find_executable
+from pipes import quote
 from pyaxmlparser import APK
 from urllib.request import urlopen
 from zipfile import ZipFile
@@ -13,7 +14,6 @@ import numpy
 import os
 import re
 import shutil
-import stat
 import sys
 import tempfile
 import threading
@@ -21,12 +21,16 @@ import threading
 class APKLeaks:
 	def __init__(self, args):
 		self.file = args.file
+		self.json = args.json
 		self.prefix = "apkleaks-"
 		self.tempdir = tempfile.mkdtemp(prefix=self.prefix)
 		self.main_dir = os.path.dirname(os.path.realpath(__file__))
-		self.output = tempfile.mkstemp(suffix=".txt", prefix=self.prefix)[1] if args.output is None else args.output
+		self.output = tempfile.mkstemp(suffix=".%s" % ("json" if self.json == True else "txt"), prefix=self.prefix)[1] if args.output is None else args.output
+		self.fileout = open(self.output, "%s" % ("w" if self.json == True else "a"))
 		self.pattern = self.main_dir + "/../config/regexes.json" if args.pattern is None else args.pattern
 		self.jadx = find_executable("jadx") if find_executable("jadx") is not None else self.main_dir + "/../jadx/bin/jadx%s" % (".bat" if os.name == "nt" else "")
+		self.outJSON = {}
+		self.scanned = False
 		logging.config.dictConfig({"version": 1, "disable_existing_loggers": True})
 
 	def apk_info(self):
@@ -34,11 +38,13 @@ class APKLeaks:
 
 	def dependencies(self):
 		exter = "https://github.com/skylot/jadx/releases/download/v1.2.0/jadx-1.2.0.zip"
-		with closing(urlopen(exter)) as jadx:
-			with ZipFile(io.BytesIO(jadx.read())) as zfile:
-				zfile.extractall(self.main_dir + "/../jadx")
-		os.chmod(self.jadx, 33268)
-		return
+		try:
+			with closing(urlopen(exter)) as jadx:
+				with ZipFile(io.BytesIO(jadx.read())) as zfile:
+					zfile.extractall(self.main_dir + "/../jadx")
+			os.chmod(self.jadx, 33268)
+		except Exception as e:
+			sys.exit(self.writeln(str(e), clr.WARNING))
 
 	def write(self, message, color):
 		sys.stdout.write("%s%s%s" % (color, message, clr.ENDC))
@@ -65,17 +71,17 @@ class APKLeaks:
 				self.writeln("** Downloading jadx...\n", clr.OKBLUE)
 				self.dependencies()
 			else:
-				exit(self.writeln("Aborted.", clr.FAIL))
+				sys.exit(self.writeln("Aborted.", clr.FAIL))
 
 		if os.path.isfile(self.file) is True:
 			try:
 				self.apk = self.apk_info()
 			except Exception as e:
-				exit(self.writeln(str(e), clr.WARNING))
+				sys.exit(self.writeln(str(e), clr.WARNING))
 			else:
 				return self.apk
 		else:
-			exit(self.writeln("It's not a valid file!", clr.WARNING))
+			sys.exit(self.writeln("It's not a valid file!", clr.WARNING))
 
 	def decompile(self):
 		self.writeln("** Decompiling APK...", clr.OKBLUE)
@@ -85,13 +91,13 @@ class APKLeaks:
 				with open(dex, "wb") as classes:
 					classes.write(zipped.read("classes.dex"))
 			except Exception as e:
-				exit(self.writeln(str(e), clr.WARNING))
-		dec = "%s %s -d %s --deobf" % (self.jadx, dex, self.tempdir)
-		os.system(dec)
-		return self.tempdir
+				sys.exit(self.writeln(str(e), clr.WARNING))
+		args = [self.jadx, dex, "-d", self.tempdir, "--deobf"]
+		comm = "%s" % (" ".join(quote(arg) for arg in args))
+		os.system(comm)
 
 	def unique(self, list): 
-		x = numpy.array(list) 
+		x = numpy.array(list)
 		return (numpy.unique(x))
 
 	def finder(self, pattern, path):
@@ -110,35 +116,53 @@ class APKLeaks:
 		return self.unique(found)
 
 	def extract(self, name, matches):
-		output = open(self.output, "a+")
 		if len(matches):
 			stdout = ("[%s]" % (name))
 			self.writeln("\n" + stdout, clr.OKGREEN)
-			output.write(stdout + "\n")
+			self.fileout.write("%s" % (stdout + "\n" if self.json == False else ""))
 			for secret in matches:
-				if name == "LinkFinder" and re.match(r"^.(L[a-z]|application|audio|cordova|fonts|image|kotlin|layout|multipart|plain|res|text|video).*\/.+", secret) is not None:
+				if name == "LinkFinder" and re.match(r"^.(L[a-z]|application|audio|fonts|image|layout|multipart|plain|text|video).*\/.+", secret) is not None:
 					continue
 				stdout = ("- %s" % (secret))
 				print(stdout)
-				output.write(stdout + "\n")
-			output.write("\n")
-		output.close()
+				self.fileout.write("%s" % (stdout + "\n" if self.json == False else ""))
+			self.fileout.write("%s" % ("\n" if self.json == False else ""))
+			self.outJSON["results"].append({"name": name, "matches": matches.tolist()})
+			self.scanned = True
 
 	def scanning(self):
 		self.writeln("\n** Scanning against '%s'" % (self.apk.package), clr.OKBLUE)
+		self.outJSON["package"] = self.apk.package
+		self.outJSON["results"] = []
 		with open(self.pattern) as regexes:
 			regex = json.load(regexes)
 			for name, pattern in regex.items():
 				if isinstance(pattern, list):
 					for pattern in pattern:
+						try:
+							thread = threading.Thread(target = self.extract, args = (name, self.finder(pattern, self.tempdir)))
+							thread.start()
+						except KeyboardInterrupt:
+							sys.exit(self.writeln("\n** Interrupted. Aborting...", clr.FAIL))
+				else:
+					try:
 						thread = threading.Thread(target = self.extract, args = (name, self.finder(pattern, self.tempdir)))
 						thread.start()
-				else:
-					thread = threading.Thread(target = self.extract, args = (name, self.finder(pattern, self.tempdir)))
-					thread.start()
-		print("%s\n** Results saved into '%s%s%s%s'%s" % (clr.OKBLUE, clr.ENDC, clr.OKGREEN, self.output, clr.OKBLUE, clr.ENDC))
+					except KeyboardInterrupt:
+						sys.exit(self.writeln("\n** Interrupted. Aborting...", clr.FAIL))
 
 	def __del__(self):
+		if self.scanned == True:
+			self.fileout.write("%s" % (json.dumps(self.outJSON, indent=4) if self.json == True else ""))
+			self.fileout.close()
+			print("%s\n** Results saved into '%s%s%s%s'%s." % (clr.HEADER, clr.ENDC, clr.OKGREEN, self.output, clr.HEADER, clr.ENDC))
+		else:
+			try:
+				os.remove(self.output)
+			except Exception:
+				None
+			self.writeln("\n** Done with nothing. ¯\\_(ツ)_/¯", clr.WARNING)
+
 		try:
 			shutil.rmtree(self.tempdir)
 		except Exception:
