@@ -41,16 +41,16 @@ $ python3 apkleaks.py -f ~/path/to/file.apk
 
 ```console
 $ python3 apkleaks.py -h
-usage: apkleaks [-h] -f FILE [-o OUTPUT] [-p PATTERN]
+usage: apkleaks [-h] -f FILE [-o OUTPUT] [-p PATTERN] [--json]
 
 optional arguments:
   -h, --help            show this help message and exit
   -f FILE, --file FILE  APK file to scanning
   -o OUTPUT, --output OUTPUT
-                        Write to file results (NULL will be saved into random
-                        file)
+                        Write to file results (random if not set)
   -p PATTERN, --pattern PATTERN
                         Path to custom patterns JSON
+  --json                Save as JSON format
 ```
 
 In general, if you don't provide `-o` argument, then it will generate results file automatically.
@@ -73,11 +73,11 @@ $ python apkleaks.py -f /path/to/file.apk -p rules.json -o ~/Documents/apkleaks-
 
 ## Known Bugs
 
-- Unable to scans on Windows.
+- Empty results on Windows (#24).
 
 ## Version
 
-Current version is `v2.0.4`, and still development.
+Current version is `v2.0.6`, and still development.
 
 ## Legal
 
