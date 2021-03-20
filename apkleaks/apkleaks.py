@@ -74,7 +74,6 @@ class APKLeaks:
 				self.dependencies()
 			else:
 				sys.exit(util.writeln("\n** Aborted.", col.FAIL))
-
 		if os.path.isfile(self.file) is True:
 			try:
 				self.apk = self.apk_info()
