@@ -10,7 +10,6 @@ import io
 import json
 import logging.config
 import mimetypes
-import numpy
 import os
 import re
 import shutil
@@ -85,20 +84,9 @@ class APKLeaks:
 
 	def decompile(self):
 		self.writeln("** Decompiling APK...", clr.OKBLUE)
-		with ZipFile(self.file) as zipped:
-			try:
-				dex = self.tempdir + "/" + self.apk.package + ".dex"
-				with open(dex, "wb") as classes:
-					classes.write(zipped.read("classes.dex"))
-			except Exception as e:
-				sys.exit(self.writeln(str(e), clr.WARNING))
-		args = [self.jadx, dex, "-d", self.tempdir, "--deobf"]
+		args = [self.jadx, self.file, "-d", self.tempdir, "--deobf"]
 		comm = "%s" % (" ".join(quote(arg) for arg in args))
 		os.system(comm)
-
-	def unique(self, list): 
-		x = numpy.array(list)
-		return (numpy.unique(x))
 
 	def finder(self, pattern, path):
 		matcher = re.compile(pattern)
@@ -106,14 +94,15 @@ class APKLeaks:
 		for path, _, files in os.walk(path):
 			for fn in files:
 				filepath = os.path.join(path, fn)
-				if mimetypes.guess_type(filepath)[0] is None:
-					continue
 				with open(filepath) as handle:
-					for lineno, line in enumerate(handle):
-						mo = matcher.search(line)
-						if mo:
-							found.append(mo.group())
-		return self.unique(found)
+					try:
+						for line in handle.readlines():
+							mo = matcher.search(line)
+							if mo:
+								found.append(mo.group())
+					except Exception:
+						pass
+		return list(set(found))
 
 	def extract(self, name, matches):
 		if len(matches):
@@ -127,7 +116,7 @@ class APKLeaks:
 				print(stdout)
 				self.fileout.write("%s" % (stdout + "\n" if self.json == False else ""))
 			self.fileout.write("%s" % ("\n" if self.json == False else ""))
-			self.outJSON["results"].append({"name": name, "matches": matches.tolist()})
+			self.outJSON["results"].append({"name": name, "matches": matches})
 			self.scanned = True
 
 	def scanning(self):
