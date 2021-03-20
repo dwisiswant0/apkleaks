@@ -1,2 +1,2 @@
-numpy==1.20.1
-pyaxmlparser==0.3.24
+numpy>=1.20.1
+pyaxmlparser>=0.3.24
