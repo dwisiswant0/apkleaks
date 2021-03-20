@@ -22,6 +22,9 @@ if __name__ == "__main__":
 	print(clr.HEADER + header() + clr.ENDC, file=sys.stderr)
 	args = argument()
 	init = APKLeaks(args)
-	apk = init.integrity()
-	init.decompile()
-	init.scanning()
+	try:
+		apk = init.integrity()
+		init.decompile()
+		init.scanning()
+	finally:
+		init.cleanup()

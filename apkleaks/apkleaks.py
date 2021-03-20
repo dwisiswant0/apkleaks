@@ -151,19 +151,12 @@ class APKLeaks:
 					except KeyboardInterrupt:
 						sys.exit(self.writeln("\n** Interrupted. Aborting...", clr.FAIL))
 
-	def __del__(self):
+	def cleanup(self):
+		shutil.rmtree(self.tempdir)
 		if self.scanned == True:
 			self.fileout.write("%s" % (json.dumps(self.outJSON, indent=4) if self.json == True else ""))
 			self.fileout.close()
 			print("%s\n** Results saved into '%s%s%s%s'%s." % (clr.HEADER, clr.ENDC, clr.OKGREEN, self.output, clr.HEADER, clr.ENDC))
 		else:
-			try:
-				os.remove(self.output)
-			except Exception:
-				None
+			os.remove(self.output)
 			self.writeln("\n** Done with nothing. ¯\\_(ツ)_/¯", clr.WARNING)
-
-		try:
-			shutil.rmtree(self.tempdir)
-		except Exception:
-			return
