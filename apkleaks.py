@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-from apkleaks.apkleaks import APKLeaks
-from apkleaks.colors import color as col
 import argparse
 import os
 import sys
+
+from apkleaks.apkleaks import APKLeaks
+from apkleaks.colors import color as col
 
 def header():
 	VERSION = open(os.path.dirname(os.path.realpath(__file__)) + "/VERSION", "r").read()
