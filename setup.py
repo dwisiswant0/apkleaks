@@ -1,10 +1,11 @@
 from setuptools import setup
 
 install_requires = open('requirements.txt', 'r').readlines()
+version = open('VERSION', 'r').read().strip()
 
 setup(
     name='apkleaks',
-    version='2.0.8',
+    version=version,
     packages=['apkleaks'],
     url='https://github.com/dwisiswant0/apkleaks/',
     license='Apache License 2.0',
