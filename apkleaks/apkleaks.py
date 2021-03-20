@@ -10,7 +10,6 @@ import io
 import json
 import logging.config
 import mimetypes
-import numpy
 import os
 import re
 import shutil
@@ -96,10 +95,6 @@ class APKLeaks:
 		comm = "%s" % (" ".join(quote(arg) for arg in args))
 		os.system(comm)
 
-	def unique(self, list): 
-		x = numpy.array(list)
-		return (numpy.unique(x))
-
 	def finder(self, pattern, path):
 		matcher = re.compile(pattern)
 		found = []
@@ -113,7 +108,7 @@ class APKLeaks:
 						mo = matcher.search(line)
 						if mo:
 							found.append(mo.group())
-		return self.unique(found)
+		return list(set(found))
 
 	def extract(self, name, matches):
 		if len(matches):
@@ -127,7 +122,7 @@ class APKLeaks:
 				print(stdout)
 				self.fileout.write("%s" % (stdout + "\n" if self.json == False else ""))
 			self.fileout.write("%s" % ("\n" if self.json == False else ""))
-			self.outJSON["results"].append({"name": name, "matches": matches.tolist()})
+			self.outJSON["results"].append({"name": name, "matches": matches})
 			self.scanned = True
 
 	def scanning(self):
