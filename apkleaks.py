@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from apkleaks.apkleaks import APKLeaks
-from apkleaks.colors import clr
+from apkleaks.colors import color as col
 import argparse
 import os
 import sys
@@ -19,7 +19,7 @@ def argument():
 	return arg
 
 if __name__ == "__main__":
-	print(clr.HEADER + header() + clr.ENDC, file=sys.stderr)
+	print(col.HEADER + header() + col.ENDC, file=sys.stderr)
 	args = argument()
 	init = APKLeaks(args)
 	try:
