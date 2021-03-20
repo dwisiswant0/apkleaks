@@ -56,20 +56,23 @@ class APKLeaks:
 			valid = {"yes": True, "y": True, "ye": True, "no": False, "n": False}
 			while True:
 				util.write("Do you want to download jadx? (Y/n) ", col.OKBLUE)
-				choice = input().lower()
-				if choice == "":
-					choice = valid["y"]
-					break
-				elif choice in valid:
-					choice = valid[choice]
-					break
-				else:
-					util.writeln("\nPlease respond with 'yes' or 'no' (or 'y' or 'n').", col.WARNING)
+				try:
+					choice = input().lower()
+					if choice == "":
+						choice = valid["y"]
+						break
+					elif choice in valid:
+						choice = valid[choice]
+						break
+					else:
+						util.writeln("\nPlease respond with 'yes' or 'no' (or 'y' or 'n').", col.WARNING)
+				except KeyboardInterrupt:
+					sys.exit(util.writeln("\n** Interrupted. Aborting.", col.FAIL))
 			if choice:
 				util.writeln("** Downloading jadx...\n", col.OKBLUE)
 				self.dependencies()
 			else:
-				sys.exit(util.writeln("Aborted.", col.FAIL))
+				sys.exit(util.writeln("\n** Aborted.", col.FAIL))
 
 		if os.path.isfile(self.file) is True:
 			try:
