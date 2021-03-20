@@ -29,8 +29,8 @@ class APKLeaks:
 		self.prefix = "apkleaks-"
 		self.tempdir = tempfile.mkdtemp(prefix=self.prefix)
 		self.main_dir = os.path.dirname(os.path.realpath(__file__))
-		self.output = tempfile.mkstemp(suffix=".%s" % ("json" if self.json is True else "txt"), prefix=self.prefix)[1] if args.output is None else args.output
-		self.fileout = open(self.output, "%s" % ("w" if self.json is True else "a"))
+		self.output = tempfile.mkstemp(suffix=".%s" % ("json" if self.json else "txt"), prefix=self.prefix)[1] if args.output is None else args.output
+		self.fileout = open(self.output, "%s" % ("w" if self.json else "a"))
 		self.pattern = os.path.join(str(Path(self.main_dir).parent), "config", "regexes.json") if args.pattern is None else args.pattern
 		self.jadx = find_executable("jadx") if find_executable("jadx") is not None else os.path.join(str(Path(self.main_dir).parent), "jadx", "bin", "jadx%s" % (".bat" if os.name == "nt" else ""))
 		self.out_json = {}
@@ -45,7 +45,7 @@ class APKLeaks:
 		try:
 			with closing(urlopen(exter)) as jadx:
 				with ZipFile(io.BytesIO(jadx.read())) as zfile:
-					zfile.extractall(self.main_dir + "/../jadx")
+					zfile.extractall(os.path.join(str(Path(self.main_dir).parent), "jadx"))
 			os.chmod(self.jadx, 33268)
 		except Exception as error:
 			util.writeln(str(error), col.WARNING)
@@ -70,11 +70,11 @@ class APKLeaks:
 				except KeyboardInterrupt:
 					sys.exit(util.writeln("\n** Interrupted. Aborting.", col.FAIL))
 			if choice:
-				util.writeln("** Downloading jadx...\n", col.OKBLUE)
+				util.writeln("\n** Downloading jadx...\n", col.OKBLUE)
 				self.dependencies()
 			else:
 				sys.exit(util.writeln("\n** Aborted.", col.FAIL))
-		if os.path.isfile(self.file) is True:
+		if os.path.isfile(self.file):
 			try:
 				self.apk = self.apk_info()
 			except Exception as error:
@@ -131,8 +131,8 @@ class APKLeaks:
 
 	def cleanup(self):
 		shutil.rmtree(self.tempdir)
-		if self.scanned is True:
-			self.fileout.write("%s" % (json.dumps(self.out_json, indent=4) if self.json is True else ""))
+		if self.scanned:
+			self.fileout.write("%s" % (json.dumps(self.out_json, indent=4) if self.json else ""))
 			self.fileout.close()
 			print("%s\n** Results saved into '%s%s%s%s'%s." % (col.HEADER, col.ENDC, col.OKGREEN, self.output, col.HEADER, col.ENDC))
 		else:
