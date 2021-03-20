@@ -9,7 +9,6 @@ from zipfile import ZipFile
 import io
 import json
 import logging.config
-import mimetypes
 import os
 import re
 import shutil
