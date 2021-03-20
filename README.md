@@ -4,7 +4,7 @@
 
 Scanning APK file for URIs, endpoints & secrets.
 
-<img src="https://user-images.githubusercontent.com/25837540/109905459-6934a900-7cd1-11eb-8e38-d43f5c9cb696.png" alt="APKLeaks" height="400">
+<img src="https://user-images.githubusercontent.com/25837540/111854909-73eb7100-8954-11eb-8caf-d00d9f0b68f6.png" alt="APKLeaks" height="400">
 
 ---
 
@@ -12,7 +12,7 @@ Scanning APK file for URIs, endpoints & secrets.
 - [Usage](#usage)
 - [Version](#version)
 - [Legal](#legal)
-- [Acknowledments](#credits-and-thanks)
+- [Acknowledments](#acknowledments)
 
 ---
 
@@ -74,10 +74,6 @@ $ python apkleaks.py -f /path/to/file.apk -p rules.json -o ~/Documents/apkleaks-
 ## Known Bugs
 
 - Empty results on Windows ([#24](https://github.com/dwisiswant0/apkleaks/issues/24)).
-
-## Version
-
-Current version is `v2.0.7`, and still development.
 
 ## Legal
 
