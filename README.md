@@ -94,10 +94,6 @@ Example patterns file:
 $ apkleaks -f /path/to/file.apk -p rules.json -o ~/Documents/apkleaks-results.txt
 ```
 
-## Known Bugs
-
-- Empty results on Windows ([#24](https://github.com/dwisiswant0/apkleaks/issues/24)).
-
 ## Legal
 
 `apkleaks` is distributed under Apache 2.
