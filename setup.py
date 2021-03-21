@@ -1,9 +1,5 @@
-<<<<<<< 697b22fbb8d8caf9cc840ee9cc0f644ebcbf318a
 #!/usr/bin/env python3
-from setuptools import setup
-=======
 from setuptools import setup, find_packages
->>>>>>> Fix setup.py and Python packaging
 
 install_requires = open('./requirements.txt', 'r').readlines()
 version = open('./VERSION', 'r').read().strip()
