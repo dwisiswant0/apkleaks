@@ -12,7 +12,7 @@ setup(
     url='https://github.com/dwisiswant0/apkleaks/',
     license='Apache License 2.0',
     author='dwisiswant0',
-    author_email='',
+    author_email='me@dw1.io',
     description='Scanning APK file for URIs, endpoints & secrets.',
     install_requires=install_requires,
     include_package_data=True,
