@@ -23,7 +23,7 @@ It's fairly simple to install **APKLeaks**:
 ### from PyPi
 
 ```bash
-$ pip3 install git+https://github.com/dwisiswant0/apkleaks
+$ pip3 install apkleaks
 ```
 
 ### from Source
@@ -53,6 +53,8 @@ APKLeaks using [jadx](https://github.com/skylot/jadx) disassembler to decompile 
 Simply,
 
 ```bash
+$ apkleaks -f ~/path/to/file.apk
+# from Source
 $ python3 apkleaks.py -f ~/path/to/file.apk
 # or with Docker
 $ docker run -it --rm -v /tmp:/tmp apkleaks:latest -f /tmp/diva.apk
