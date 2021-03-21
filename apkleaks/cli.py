@@ -4,7 +4,7 @@ import pkg_resources
 import sys
 
 from apkleaks.apkleaks import APKLeaks
-from apkleaks.colors import clr
+from apkleaks.colors import color as col
 
 
 def header():
@@ -25,7 +25,7 @@ def argument():
 
 
 def main():
-    print(clr.HEADER + header() + clr.ENDC, file=sys.stderr)
+    print(col.HEADER + header() + col.ENDC, file=sys.stderr)
     args = argument()
     init = APKLeaks(args)
     try:
