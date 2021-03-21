@@ -1,2 +1,5 @@
 jadx/
 *.pyc
+*.egg-info/
+build/
+dist/
