@@ -18,9 +18,17 @@ Scanning APK file for URIs, endpoints & secrets.
 
 ## Installation
 
+It's fairly simple to install **APKLeaks**:
+
+### from PyPi
+
+```bash
+$ pip3 install git+https://github.com/dwisiswant0/apkleaks
+```
+
 ### from Source
 
-It's fairly simple to install **APKLeaks**:
+Clone repository and install requirements:
 
 ```bash
 $ git clone https://github.com/dwisiswant0/apkleaks
@@ -38,7 +46,7 @@ $ docker pull dwisiswant0/apkleaks:latest
 
 ### Dependencies
 
-APKLeaks using [jadx](https://github.com/skylot/jadx) dissambler to decompile APK file. If it doesn't exist in your environment, it'll ask you to download or nah.
+APKLeaks using [jadx](https://github.com/skylot/jadx) disassembler to decompile APK file. If it doesn't exist in your environment, it'll ask you to download or nah.
 
 ## Usage
 
@@ -53,7 +61,7 @@ $ docker run -it --rm -v /tmp:/tmp apkleaks:latest -f /tmp/diva.apk
 ### Options
 
 ```console
-$ python3 apkleaks.py -h
+$ apkleaks -h
 usage: apkleaks [-h] -f FILE [-o OUTPUT] [-p PATTERN] [--json]
 
 optional arguments:
@@ -81,7 +89,7 @@ Example patterns file:
 ```
 
 ```
-$ python apkleaks.py -f /path/to/file.apk -p rules.json -o ~/Documents/apkleaks-results.txt
+$ apkleaks -f /path/to/file.apk -p rules.json -o ~/Documents/apkleaks-results.txt
 ```
 
 ## Known Bugs
