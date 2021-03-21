@@ -18,12 +18,22 @@ Scanning APK file for URIs, endpoints & secrets.
 
 ## Installation
 
-To install **APKLeaks**, simply:
+### from Source
 
-```
+It's fairly simple to install **APKLeaks**:
+
+```bash
 $ git clone https://github.com/dwisiswant0/apkleaks
 $ cd apkleaks/
 $ pip3 install -r requirements.txt
+```
+
+### from Docker
+
+Pull the Docker image by running:
+
+```bash
+$ docker pull dwisiswant0/apkleaks:latest
 ```
 
 ### Dependencies
@@ -32,9 +42,12 @@ APKLeaks using [jadx](https://github.com/skylot/jadx) dissambler to decompile AP
 
 ## Usage
 
-It's fairly simple,
-```
+Simply,
+
+```bash
 $ python3 apkleaks.py -f ~/path/to/file.apk
+# or with Docker
+$ docker run -it --rm -v /tmp:/tmp apkleaks:latest -f /tmp/diva.apk
 ```
 
 ### Options
