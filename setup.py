@@ -19,6 +19,7 @@ setup(
     author_email="me@dw1.io",
     description="Scanning APK file for URIs, endpoints & secrets.",
     long_description=long_description,
+    long_description_content_type="text/markdown",
     install_requires=install_requires,
     include_package_data=True,
     entry_points={
