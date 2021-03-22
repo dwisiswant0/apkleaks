@@ -3,6 +3,7 @@ from setuptools import setup, find_packages
 
 install_requires = open('./requirements.txt', 'r').readlines()
 version = open('./VERSION', 'r').read().strip()
+long_description = open('./README.md', 'r', encoding='utf-8').read()
 packages = find_packages(exclude=['*.tests', '*.tests.*', 'test*', 'tests'])
 packages.append('config')
 
@@ -15,6 +16,7 @@ setup(
     author='dwisiswant0',
     author_email='me@dw1.io',
     description='Scanning APK file for URIs, endpoints & secrets.',
+    long_description=long_description,
     install_requires=install_requires,
     include_package_data=True,
     entry_points={
