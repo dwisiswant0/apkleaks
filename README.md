@@ -69,13 +69,13 @@ $ docker run -it --rm -v /tmp:/tmp apkleaks:latest -f /tmp/file.apk
 
 Here are all the options it supports.
 
-| **Argument**  	| **Description**                             	| **Example**                                                 	|
-|---------------	|---------------------------------------------	|-------------------------------------------------------------	|
-| -f, --file    	| APK file to scanning                        	| `apkleaks -f file.apk`                                      	|
-| -o, --output  	| Write to file results _(random if not set)_ 	| `apkleaks -f file.apk -o apkleaks-results-file.txt`         	|
-| -p, --pattern 	| Path to custom patterns JSON                	| `apkleaks -f file.apk -p custom-rules.json`                 	|
-| -a, --args    	| Disassembler arguments                      	| `apkleaks -f file.apk --args="--deobf --log-level DEBUG"`   	|
-| --json        	| Save as JSON format                         	| `apkleaks -f file.apk -o apkleaks-results-file.json --json` 	|
+| **Argument**  	| **Description**                             	| **Example**                                                   |
+|---------------	|---------------------------------------------	|-------------------------------------------------------------  |
+| -f, --file    	| APK file to scanning                        	| `apkleaks -f file.apk`                                        |
+| -o, --output  	| Write to file results _(random if not set)_ 	| `apkleaks -f file.apk -o results.txt`                         |
+| -p, --pattern 	| Path to custom patterns JSON                	| `apkleaks -f file.apk -p custom-rules.json`                   |
+| -a, --args    	| Disassembler arguments                      	| `apkleaks -f file.apk --args="--deobf --log-level DEBUG"`     |
+| --json        	| Save as JSON format                         	| `apkleaks -f file.apk -o results.json --json`                 |
 
 ### Output
 
