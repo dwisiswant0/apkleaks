@@ -4,13 +4,12 @@
 
 Scanning APK file for URIs, endpoints & secrets.
 
-<img src="https://user-images.githubusercontent.com/25837540/111854909-73eb7100-8954-11eb-8caf-d00d9f0b68f6.png" alt="APKLeaks" height="400">
+<img src="https://user-images.githubusercontent.com/25837540/111927529-a4ade080-8ae3-11eb-800a-b764ab1242e1.jpg" alt="APKLeaks">
 
 ---
 
 - [Installation](#installation)
 - [Usage](#usage)
-- [Version](#version)
 - [Legal](#legal)
 - [Acknowledments](#acknowledments)
 
