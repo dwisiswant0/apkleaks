@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
+from os import path
 from setuptools import setup, find_packages
 
-install_requires = open("./requirements.txt", "r").readlines()
-version = open("./VERSION", "r").read().strip()
-long_description = open("./README.md", "r", encoding="utf-8").read()
+main_dir = path.abspath(path.dirname(__file__))
+install_requires = open(path.join(main_dir, "requirements.txt"), "r").readlines()
+version = open(path.join(main_dir, "VERSION"), "r").read().strip()
+long_description = open(path.join(main_dir, "README.md"), "r", encoding="utf-8").read()
 packages = find_packages(exclude=["*.tests", "*.tests.*", "test*", "tests"])
 packages.append("config")
 
