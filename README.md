@@ -6,11 +6,17 @@ Scanning APK file for URIs, endpoints & secrets.
 
 <img src="https://user-images.githubusercontent.com/25837540/111927529-a4ade080-8ae3-11eb-800a-b764ab1242e1.jpg" alt="APKLeaks">
 
----
-
 - [Installation](#installation)
+  - [from Pypi](#from-pypi)
+  - [from Source](#from-source)
+  - [from Docker](#from-docker)
 - [Usage](#usage)
-- [Legal](#legal)
+  - [Options](#options)
+    - [Output](#output)
+    - [Pattern](#pattern)
+    - [Pattern](#pattern)
+    - [Arguments (disassembler)](#arguments-disassembler)
+- [License](#license)
 - [Acknowledments](#acknowledments)
 
 ---
@@ -45,7 +51,7 @@ $ docker pull dwisiswant0/apkleaks:latest
 
 ### Dependencies
 
-APKLeaks using [jadx](https://github.com/skylot/jadx) disassembler to decompile APK file. If it doesn't exist in your environment, it'll ask you to download or nah.
+APKLeaks using [jadx](https://github.com/skylot/jadx) disassembler to decompile APK file. If it doesn't exist in your environment, it'll ask you to download.
 
 ## Usage
 
@@ -56,33 +62,35 @@ $ apkleaks -f ~/path/to/file.apk
 # from Source
 $ python3 apkleaks.py -f ~/path/to/file.apk
 # or with Docker
-$ docker run -it --rm -v /tmp:/tmp apkleaks:latest -f /tmp/diva.apk
+$ docker run -it --rm -v /tmp:/tmp apkleaks:latest -f /tmp/file.apk
 ```
 
-### Options
+## Options
 
-```console
-$ apkleaks -h
-usage: apkleaks [-h] -f FILE [-o OUTPUT] [-p PATTERN] [--json]
+Here are all the options it supports.
 
-optional arguments:
-  -h, --help            show this help message and exit
-  -f FILE, --file FILE  APK file to scanning
-  -o OUTPUT, --output OUTPUT
-                        Write to file results (random if not set)
-  -p PATTERN, --pattern PATTERN
-                        Path to custom patterns JSON
-  --json                Save as JSON format
-```
+| **Argument**  	| **Description**                             	| **Example**                                                   |
+|---------------	|---------------------------------------------	|-------------------------------------------------------------  |
+| -f, --file    	| APK file to scanning                        	| `apkleaks -f file.apk`                                        |
+| -o, --output  	| Write to file results _(random if not set)_ 	| `apkleaks -f file.apk -o results.txt`                         |
+| -p, --pattern 	| Path to custom patterns JSON                	| `apkleaks -f file.apk -p custom-rules.json`                   |
+| -a, --args    	| Disassembler arguments                      	| `apkleaks -f file.apk --args="--deobf --log-level DEBUG"`     |
+| --json        	| Save as JSON format                         	| `apkleaks -f file.apk -o results.json --json`                 |
+
+### Output
 
 In general, if you don't provide `-o` argument, then it will generate results file automatically.
 
-Custom patterns can be added with the following flag `--pattern /path/to/rules.json` to provide sensitive _search rules_ in the JSON file format. If not set, it'll use default patterns from [regexes.json](https://github.com/dwisiswant0/apkleaks/blob/master/config/regexes.json) file.
+**NOTE:** By default it will also save the results in text format, use `--json` argument if you want JSON output format.
+
+### Pattern
+
+Custom patterns can be added with the following argument to provide sensitive _search rules_ in the JSON file format: `--pattern /path/to/custom-rules.json`. If not set, it'll use default patterns from [regexes.json](https://github.com/dwisiswant0/apkleaks/blob/master/config/regexes.json) file.
 
 Example patterns file:
 
 ```json
-// rules.json
+// custom-rules.json
 {
   "Amazon AWS Access Key ID": "AKIA[0-9A-Z]{16}",
   ...
@@ -93,7 +101,17 @@ Example patterns file:
 $ apkleaks -f /path/to/file.apk -p rules.json -o ~/Documents/apkleaks-results.txt
 ```
 
-## Legal
+### Arguments (disassembler)
+
+We give user complete discretion to pass the disassembler arguments. For example, if you want to activate threads in `jadx` decompilation process, you can add it with `-a/--args` argument, example: `--args="--threads-count 5"`.
+
+```
+$ apkleaks -f /path/to/file.apk -a "--deobf --log-level DEBUG"
+```
+
+**NOTE:** Please pay attention to the default disassembler arguments we use to prevent collisions.
+
+## License
 
 `apkleaks` is distributed under Apache 2.
 
