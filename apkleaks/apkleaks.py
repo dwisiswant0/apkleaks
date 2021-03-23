@@ -141,5 +141,6 @@ class APKLeaks:
 			self.fileout.close()
 			print("%s\n** Results saved into '%s%s%s%s'%s." % (col.HEADER, col.ENDC, col.OKGREEN, self.output, col.HEADER, col.ENDC))
 		else:
+			self.fileout.close()
 			os.remove(self.output)
 			util.writeln("\n** Done with nothing. ¯\\_(ツ)_/¯", col.WARNING)
