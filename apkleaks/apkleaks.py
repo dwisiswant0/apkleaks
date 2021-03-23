@@ -26,7 +26,7 @@ class APKLeaks:
 		self.apk = None
 		self.file = args.file
 		self.json = args.json
-		self.disarg = re.split(r"\s|=", args.args)
+		self.disarg = args.args
 		self.prefix = "apkleaks-"
 		self.tempdir = tempfile.mkdtemp(prefix=self.prefix)
 		self.main_dir = os.path.dirname(os.path.realpath(__file__))
@@ -89,7 +89,10 @@ class APKLeaks:
 	def decompile(self):
 		util.writeln("** Decompiling APK...", col.OKBLUE)
 		args = [self.jadx, self.file, "-d", self.tempdir]
-		args.extend(self.disarg)
+		try:
+			args.extend(re.split(r"\s|=", self.disarg))
+		except Exception:
+			pass
 		comm = "%s" % (" ".join(quote(arg) for arg in args))
 		os.system(comm)
 
