@@ -93,7 +93,7 @@ class APKLeaks:
 			args.extend(re.split(r"\s|=", self.disarg))
 		except Exception:
 			pass
-		comm = "%s" % (" ".join(quote(arg) for arg in args))
+		comm = "%s" % (" ".join(arg for arg in args))
 		os.system(comm)
 
 	def extract(self, name, matches):
