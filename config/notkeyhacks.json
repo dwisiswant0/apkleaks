@@ -1,0 +1,14 @@
+{
+	"Sift_Key": "\\.with(?:AccountId|BeaconKey)\\([\"|'].*[\"|']\\)",
+	"Sentry_DSN": "https?:\/\/(\\w+)(:\\w+)?@sentry\\.io\/[0-9]+",
+	"Intercom_API_Key": "Intercom\\.initialize\\([\"|']?\\w+[\"|']?,\\s?[\"|']?\\w+[\"|']?,\\s?[\"|']?\\w+[\"|']?\\)",
+	"Singular_Config": "SingularConfig\\([\"|']?[\\w._]+[\"|']?,\\s?[\"|']?[\\w._]+[\"|']?\\)",
+	"Adjust_Config": [
+		"AdjustConfig\\([\"|']?[\\w]+[\"|']?,\\s?[\"|']?[\\w]+[\"|']?(,\\s?[\"|']?[\\w]+[\"|']?)?\\)",
+		"([a|A]djust)?[C|c]onfig\\.setAppSecret\\(.*\\)"
+	],
+	"Bitmovin_API_Key": "BITMOVIN_API_KEY\\s?=\\s?['|\"]?.*['|\"]?",
+	"Salesforce_MarketingCloud_Token": "setAccessToken\\(\\w+.MC_ACCESS_TOKEN\\)",
+	"AppDynamics_Key": "AgentConfiguration\\.builder\\(\\)(\\s*)?([\\.\\w\\(\\)\\s]+)\\.withAppKey\\(.*?\\)",
+	"AppCenter_Secret": "AppCenter\\.(configure|start)\\(.*\\)"
+}
