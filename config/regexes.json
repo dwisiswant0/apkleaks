@@ -15,7 +15,9 @@
 	],
 	"AWS_API_Key": "AKIA[0-9A-Z]{16}",
 	"Facebook_Access_Token": "EAACEdEose0cBA[0-9A-Za-z]+",
+	"Facebook_Secret_Key": "(?i)(facebook|fb)(.{0,20})?(?-i)['\"][0-9a-f]{32}",
 	"Facebook_OAuth": "[f|F][a|A][c|C][e|E][b|B][o|O][o|O][k|K].*['|\"][0-9a-f]{32}['|\"]",
+	"Facebook_ClientID": "(?i)(facebook|fb)(.{0,20})?['\"][0-9]{13,17}",
 	"Firebase": "[a-z0-9.-]+\\.firebaseio\\.com",
 	"GitHub": "[g|G][i|I][t|T][h|H][u|U][b|B].*['|\"][0-9a-zA-Z]{35,40}['|\"]",
 	"Generic_API_Key": "[a|A][p|P][i|I][_]?[k|K][e|E][y|Y].*['|\"][0-9a-zA-Z]{32,45}['|\"]",
@@ -38,6 +40,16 @@
 	"Square_Access_Token": "sq0atp-[0-9A-Za-z\\-_]{22}",
 	"Square_OAuth_Secret": "sq0csp-[0-9A-Za-z\\-_]{43}",
 	"Twilio_API_Key": "SK[0-9a-fA-F]{32}",
+	"Twitter_ClientID": "(?i)twitter(.{0,20})?['\"][0-9a-z]{18,25}",
 	"Twitter_Access_Token": "[t|T][w|W][i|I][t|T][t|T][e|E][r|R].*[1-9][0-9]+-[0-9a-zA-Z]{40}",
-	"Twitter_OAuth": "[t|T][w|W][i|I][t|T][t|T][e|E][r|R].*['|\"][0-9a-zA-Z]{35,44}['|\"]"
+	"Twitter_Secret_Key": "(?i)twitter(.{0,20})?['\"][0-9a-z]{35,44}",
+	"Twitter_OAuth": "[t|T][w|W][i|I][t|T][t|T][e|E][r|R].*['|\"][0-9a-zA-Z]{35,44}['|\"]",
+	"Artifactory_API_Token": "(?:\\s|=|:|\"|^)AKC[a-zA-Z0-9]{10,}",
+	"Artifactory_Password": "(?:\\s|=|:|\"|^)AP[\\dABCDEF][a-zA-Z0-9]{8,}",
+	"Authorization_Basic": "basic\\s[a-zA-Z0-9_\\-:\\.=]+",
+	"Authorization_Bearer": "bearer\\s[a-zA-Z0-9_\\-:\\.=]+",
+	"Basic_Auth_Credentials": "(?<=:\/\/)[a-zA-Z0-9]+:[a-zA-Z0-9]+@[a-zA-Z0-9]+\\.[a-zA-Z]+",
+	"Cloudinary_Basic_Auth": "cloudinary:\/\/[0-9]{15}:[0-9A-Za-z]+@[a-z]+",
+	"Mailto": "(?<=mailto:)[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9.-]+",
+	"Vault_Token": "[sb]\\.[a-zA-Z0-9]{24}"
 }
