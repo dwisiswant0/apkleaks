@@ -127,4 +127,5 @@ Since this tool includes some contributions, and I'm not an asshole, I'll public
 - [@subho007](https://github.com/ph4r05) for standalone APK parser.
 - `SHA2048#4361` _(Discord user)_ that help me porting code to Python3.
 - [@Ry0taK](https://github.com/Ry0taK) because he had reported an [OS command injection bug](https://github.com/dwisiswant0/apkleaks/security/advisories/GHSA-8434-v7xw-8m9x).
+- [@dee__see](https://twitter.com/dee__see) - for curated potentially sensitive tokens, `NotKeyHacks`.
 - [All contributors](https://github.com/dwisiswant0/apkleaks/graphs/contributors).
