@@ -33,7 +33,7 @@ class APKLeaks:
 		self.output = tempfile.mkstemp(suffix=".%s" % ("json" if self.json else "txt"), prefix=self.prefix)[1] if args.output is None else args.output
 		self.fileout = open(self.output, "%s" % ("w" if self.json else "a"))
 		self.pattern = os.path.join(str(Path(self.main_dir).parent), "config", "regexes.json") if args.pattern is None else args.pattern
-		self.jadx = find_executable("jadx") if find_executable("jadx") is not None else os.path.join(str(Path(self.main_dir).parent), "jadx", "bin", "jadx%s" % (".bat" if os.name == "nt" else ""))
+		self.jadx = find_executable("jadx") if find_executable("jadx") is not None else os.path.join(str(Path(self.main_dir).parent), "jadx", "bin", "jadx%s" % (".bat" if os.name == "nt" else "")).replace("\\","/")
 		self.out_json = {}
 		self.scanned = False
 		logging.config.dictConfig({"version": 1, "disable_existing_loggers": True})
@@ -94,6 +94,7 @@ class APKLeaks:
 		except Exception:
 			pass
 		comm = "%s" % (" ".join(quote(arg) for arg in args))
+		comm = comm.replace("\'","\"")
 		os.system(comm)
 
 	def extract(self, name, matches):
@@ -102,8 +103,10 @@ class APKLeaks:
 			util.writeln("\n" + stdout, col.OKGREEN)
 			self.fileout.write("%s" % (stdout + "\n" if self.json is False else ""))
 			for secret in matches:
-				if name == "LinkFinder" and re.match(r"^.(L[a-z]|application|audio|fonts|image|layout|multipart|plain|text|video).*\/.+", secret) is not None:
-					continue
+				if name == "LinkFinder":
+					if re.match(r"^.(L[a-z]|application|audio|fonts|image|kotlin|layout|multipart|plain|text|video).*\/.+", secret) is not None:
+						continue
+					secret = secret[len("'"):-len("'")]
 				stdout = ("- %s" % (secret))
 				print(stdout)
 				self.fileout.write("%s" % (stdout + "\n" if self.json is False else ""))
