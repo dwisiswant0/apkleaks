@@ -24,7 +24,7 @@ from apkleaks.utils import util
 class APKLeaks:
 	def __init__(self, args):
 		self.apk = None
-		self.file = args.file
+		self.file = os.path.realpath(args.file)
 		self.json = args.json
 		self.disarg = args.args
 		self.prefix = "apkleaks-"
