@@ -24,7 +24,8 @@ from apkleaks.utils import util
 class APKLeaks:
 	def __init__(self, args):
 		self.apk = None
-		self.file = os.path.realpath(args.file)
+		#This gets the absolute path the real path of args.file. We will later pass this parameter as an argument to a cli command, so we must have it's absolute path.
+		self.file = os.path.abspath(os.path.realpath(args.file))
 		self.json = args.json
 		self.disarg = args.args
 		self.prefix = "apkleaks-"
@@ -33,7 +34,11 @@ class APKLeaks:
 		self.output = tempfile.mkstemp(suffix=".%s" % ("json" if self.json else "txt"), prefix=self.prefix)[1] if args.output is None else args.output
 		self.fileout = open(self.output, "%s" % ("w" if self.json else "a"))
 		self.pattern = os.path.join(str(Path(self.main_dir).parent), "config", "regexes.json") if args.pattern is None else args.pattern
+
 		self.jadx = find_executable("jadx") if find_executable("jadx") is not None else os.path.join(str(Path(self.main_dir).parent), "jadx", "bin", "jadx%s" % (".bat" if os.name == "nt" else "")).replace("\\","/")
+
+		util.writeln(self.jadx, col.WARNING)
+
 		self.out_json = {}
 		self.scanned = False
 		logging.config.dictConfig({"version": 1, "disable_existing_loggers": True})
@@ -75,6 +80,7 @@ class APKLeaks:
 				self.dependencies()
 			else:
 				sys.exit(util.writeln("\n** Aborted.", col.FAIL))
+
 		if os.path.isfile(self.file):
 			try:
 				self.apk = self.apk_info()
@@ -88,13 +94,32 @@ class APKLeaks:
 
 	def decompile(self):
 		util.writeln("** Decompiling APK...", col.OKBLUE)
-		args = [self.jadx, self.file, "-d", self.tempdir]
+
+		#If the path contains a space..
+		#This is the case if apkleaks was installed on windows through PyPi, as apkleaks.exe ends up in the path "C:/Program Files/Python39/Lib/site-packages/jadx/bin/jadx.bat" (in this example, under python39)
+		#On windows, if an executable's path doesn't contain spaces but is it quoted anyway, the command fails. We must only quote the path if it has spaces.
+		if(self.jadx.__contains__(" ")):
+			args = ["\"" + self.jadx + "\"", self.file, "-d", self.tempdir]
+		else:
+			args = [self.jadx, self.file, "-d", self.tempdir]
+		
+
 		try:
 			args.extend(re.split(r"\s|=", self.disarg))
 		except Exception:
 			pass
+
+		#add single quotes to every parameter
 		comm = "%s" % (" ".join(quote(arg) for arg in args))
+
+		#jadix.bat doesn't like single quotes. Replace them with double quotes
 		comm = comm.replace("\'","\"")
+
+		#If the path to jadx contains a space
+		if(self.jadx.__contains__(" ")):
+			#eliminate duplicate quotes
+			comm = comm.replace("\"\"","\"")
+		
 		os.system(comm)
 
 	def extract(self, name, matches):
