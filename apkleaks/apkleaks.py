@@ -36,9 +36,6 @@ class APKLeaks:
 		self.pattern = os.path.join(str(Path(self.main_dir).parent), "config", "regexes.json") if args.pattern is None else args.pattern
 
 		self.jadx = find_executable("jadx") if find_executable("jadx") is not None else os.path.join(str(Path(self.main_dir).parent), "jadx", "bin", "jadx%s" % (".bat" if os.name == "nt" else "")).replace("\\","/")
-
-		util.writeln(self.jadx, col.WARNING)
-
 		self.out_json = {}
 		self.scanned = False
 		logging.config.dictConfig({"version": 1, "disable_existing_loggers": True})
