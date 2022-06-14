@@ -25,7 +25,7 @@ class APKLeaks:
 	def __init__(self, args):
 		self.apk = None
 		#This gets the absolute path the real path of args.file. We will later pass this parameter as an argument to a cli command, so we must have it's absolute path.
-		self.file = os.path.abspath(os.path.realpath(args.file))
+		self.file = os.path.realpath(args.file)
 		self.json = args.json
 		self.disarg = args.args
 		self.prefix = "apkleaks-"
@@ -71,7 +71,7 @@ class APKLeaks:
 						util.writeln("\nPlease respond with 'yes' or 'no' (or 'y' or 'n').", col.WARNING)
 				except KeyboardInterrupt:
 					sys.exit(util.writeln("\n** Interrupted. Aborting.", col.FAIL))
-					
+
 			if choice:
 				util.writeln("\n** Downloading jadx...\n", col.OKBLUE)
 				self.dependencies()
