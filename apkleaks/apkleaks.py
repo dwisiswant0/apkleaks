@@ -34,7 +34,6 @@ class APKLeaks:
 		self.output = tempfile.mkstemp(suffix=".%s" % ("json" if self.json else "txt"), prefix=self.prefix)[1] if args.output is None else args.output
 		self.fileout = open(self.output, "%s" % ("w" if self.json else "a"))
 		self.pattern = os.path.join(str(Path(self.main_dir).parent), "config", "regexes.json") if args.pattern is None else args.pattern
-
 		self.jadx = find_executable("jadx") if find_executable("jadx") is not None else os.path.join(str(Path(self.main_dir).parent), "jadx", "bin", "jadx%s" % (".bat" if os.name == "nt" else "")).replace("\\","/")
 		self.out_json = {}
 		self.scanned = False
@@ -72,6 +71,7 @@ class APKLeaks:
 						util.writeln("\nPlease respond with 'yes' or 'no' (or 'y' or 'n').", col.WARNING)
 				except KeyboardInterrupt:
 					sys.exit(util.writeln("\n** Interrupted. Aborting.", col.FAIL))
+					
 			if choice:
 				util.writeln("\n** Downloading jadx...\n", col.OKBLUE)
 				self.dependencies()
