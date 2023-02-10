@@ -5,36 +5,32 @@ on:
       - v*
 
 jobs: 
-  release: 
+  publish: 
     name: "Publish to DockerHub"
     runs-on: ubuntu-latest
     steps:
       - name: "Check out code"
-        uses: actions/checkout@v2
-
-      - name: "Set variables"
-        id: vars
-        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+        uses: actions/checkout@v3
 
       - name: "Set up QEMU"
-        uses: docker/setup-qemu-action@v1.0.1
+        uses: docker/setup-qemu-action@v2.1.0
       
       - name: "Set up Docker Buildx"
-        uses: docker/setup-buildx-action@v1.1.1
+        uses: docker/setup-buildx-action@v2.4.1
       
       - name: "Login to DockerHub"
-        uses: docker/login-action@v1.8.0
+        uses: docker/login-action@v2.1.0
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
       
       - name: "Build and push"
         id: docker_build
-        uses: docker/build-push-action@v2.3.0
+        uses: docker/build-push-action@v4.0.0
         with:
           push: true
-          build-args: "VERSION=${{ steps.vars.outputs.tag }}"
-          tags: "${{ github.repository }}:latest,${{ github.repository }}:${{ steps.vars.outputs.tag }}"
+          build-args: "VERSION=${{ github.ref_name }}"
+          tags: "${{ github.repository }}:latest,${{ github.repository }}:${{ github.ref_name }}"
       
       - name: "Image digest"
         run: echo ${{ steps.docker_build.outputs.digest }}
