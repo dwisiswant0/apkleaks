@@ -14,8 +14,7 @@ Scanning APK file for URIs, endpoints & secrets.
   - [Options](#options)
     - [Output](#output)
     - [Pattern](#pattern)
-    - [Pattern](#pattern)
-    - [Arguments (disassembler)](#arguments-disassembler)
+    - [Arguments (for disassembler)](#arguments-for-disassembler)
 - [License](#license)
 - [Acknowledments](#acknowledments)
 
@@ -51,7 +50,7 @@ $ docker pull dwisiswant0/apkleaks:latest
 
 ### Dependencies
 
-APKLeaks using [jadx](https://github.com/skylot/jadx) disassembler to decompile APK file. If it doesn't exist in your environment, it'll ask you to download.
+The APKLeaks utilizes the [jadx](https://github.com/skylot/jadx) disassembler to decompile APK files. If jadx is not present in your system, it will prompt you to download it.
 
 ## Usage
 
@@ -75,7 +74,7 @@ Here are all the options it supports.
 | -o, --output  	| Write to file results _(random if not set)_ 	| `apkleaks -f file.apk -o results.txt`                         |
 | -p, --pattern 	| Path to custom patterns JSON                	| `apkleaks -f file.apk -p custom-rules.json`                   |
 | -a, --args    	| Disassembler arguments                      	| `apkleaks -f file.apk --args="--deobf --log-level DEBUG"`     |
-| --json        	| Save as JSON format                         	| `apkleaks -f file.apk -o results.json --json`                 |
+|     --json      | Save as JSON format                         	| `apkleaks -f file.apk -o results.json --json`                 |
 
 ### Output
 
@@ -85,19 +84,21 @@ In general, if you don't provide `-o` argument, then it will generate results fi
 
 ### Pattern
 
-Custom patterns can be added with the following argument to provide sensitive _search rules_ in the JSON file format: `--pattern /path/to/custom-rules.json`. If not set, it'll use default patterns from [regexes.json](https://github.com/dwisiswant0/apkleaks/blob/master/config/regexes.json) file.
+Custom patterns can be added with the following argument to provide sensitive _search rules_ in the JSON file format: `--pattern /path/to/custom-rules.json`. If no file is set, the tool will use the default patterns found in [regexes.json](https://github.com/dwisiswant0/apkleaks/blob/master/config/regexes.json) file.
 
-Example patterns file:
+Here's an example of what a custom pattern file could look like:
 
 ```json
 // custom-rules.json
 {
   "Amazon AWS Access Key ID": "AKIA[0-9A-Z]{16}",
-  ...
+  // ...
 }
 ```
 
-```
+To run the tool using these custom rules, use the following command:
+
+```bash
 $ apkleaks -f /path/to/file.apk -p rules.json -o ~/Documents/apkleaks-results.txt
 ```
 
@@ -109,7 +110,8 @@ We give user complete discretion to pass the disassembler arguments. For example
 $ apkleaks -f /path/to/file.apk -a "--deobf --log-level DEBUG"
 ```
 
-**NOTE:** Please pay attention to the default disassembler arguments we use to prevent collisions.
+> **Warning**:
+> Please pay attention to the default disassembler arguments we use to prevent collisions.
 
 ## License
 
