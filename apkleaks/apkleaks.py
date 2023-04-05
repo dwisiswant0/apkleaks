@@ -36,6 +36,7 @@ class APKLeaks:
 		self.jadx = find_executable("jadx") if find_executable("jadx") is not None else os.path.join(str(Path(self.main_dir).parent), "jadx", "bin", "jadx%s" % (".bat" if os.name == "nt" else "")).replace("\\","/")
 		self.out_json = {}
 		self.scanned = False
+		self.files_to_scan = []
 		logging.config.dictConfig({"version": 1, "disable_existing_loggers": True})
 
 	def apk_info(self):
@@ -120,22 +121,29 @@ class APKLeaks:
 		util.writeln("\n** Scanning against '%s'" % (self.apk.package), col.OKBLUE)
 		self.out_json["package"] = self.apk.package
 		self.out_json["results"] = []
+		self.precompute_files_scan()
 		with open(self.pattern) as regexes:
 			regex = json.load(regexes)
 			for name, pattern in regex.items():
 				if isinstance(pattern, list):
 					for p in pattern:
 						try:
-							thread = threading.Thread(target = self.extract, args = (name, util.finder(p, self.tempdir)))
+							thread = threading.Thread(target = self.extract, args = (name, util.finder(p, self.files_to_scan)))
 							thread.start()
 						except KeyboardInterrupt:
 							sys.exit(util.writeln("\n** Interrupted. Aborting...", col.FAIL))
 				else:
 					try:
-						thread = threading.Thread(target = self.extract, args = (name, util.finder(pattern, self.tempdir)))
+						thread = threading.Thread(target = self.extract, args = (name, util.finder(pattern, self.files_to_scan)))
 						thread.start()
 					except KeyboardInterrupt:
 						sys.exit(util.writeln("\n** Interrupted. Aborting...", col.FAIL))
+
+	def precompute_files_scan(self):
+		for fp, _, files in os.walk(self.tempdir):
+			for fn in files:
+				filepath = os.path.join(fp, fn)
+				self.files_to_scan.append(filepath)
 
 	def cleanup(self):
 		shutil.rmtree(self.tempdir)
