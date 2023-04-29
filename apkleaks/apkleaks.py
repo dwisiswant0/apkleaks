@@ -110,6 +110,7 @@ class APKLeaks:
 				f.write(tag_name)
 
 			util.writeln(f"[+] jadx-{tag_name} successfully downloaded and extracted.", col.OKGREEN)
+			os.chmod(self.jadx, 33268)
 		else:
 			util.writeln(f"[*] jadx-{tag_name} is already up to date.", col.OKGREEN)
 
