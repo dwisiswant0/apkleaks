@@ -27,6 +27,7 @@ class APKLeaks:
 		self.file = os.path.realpath(args.file)
 		self.json = args.json
 		self.disarg = args.args
+		self.apk_dir = args.dir
 		self.prefix = "apkleaks-"
 		self.tempdir = tempfile.mkdtemp(prefix=self.prefix)
 		self.main_dir = os.path.dirname(os.path.realpath(__file__))
@@ -53,7 +54,7 @@ class APKLeaks:
 			sys.exit()
 
 	def integrity(self):
-		if os.path.exists(self.jadx) is False:
+		if os.path.exists(self.jadx) is False and self.apk_dir == None:
 			util.writeln("Can't find jadx binary.", col.WARNING)
 			valid = {"yes": True, "y": True, "ye": True, "no": False, "n": False}
 			while True:
@@ -117,6 +118,8 @@ class APKLeaks:
 	def scanning(self):
 		if self.apk is None:
 			sys.exit(util.writeln("** Undefined package. Exit!", col.FAIL))
+		if self.apk_dir :
+			self.tempdir = os.path.abspath(self.apk_dir)
 		util.writeln("\n** Scanning against '%s'" % (self.apk.package), col.OKBLUE)
 		self.out_json["package"] = self.apk.package
 		self.out_json["results"] = []

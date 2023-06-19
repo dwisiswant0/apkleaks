@@ -19,6 +19,7 @@ def header():
 def argument():
 	parser = argparse.ArgumentParser()
 	parser.add_argument("-f", "--file", help="APK file to scanning", type=str, required=True)
+	parser.add_argument("-d", "--dir", help="Directory of decompiled apk to scan", type=str, required=False)
 	parser.add_argument("-o", "--output", help="Write to file results (random if not set)", type=str, required=False)
 	parser.add_argument("-p", "--pattern", help="Path to custom patterns JSON", type=str, required=False)
 	parser.add_argument("-a", "--args", help="Disassembler arguments (e.g. --threads-count 5 --deobf)", type=str, required=False)
@@ -32,7 +33,8 @@ def main():
 	init = APKLeaks(args)
 	try:
 		init.integrity()
-		init.decompile()
+		if not args.dir :
+			init.decompile()
 		init.scanning()
 	finally:
 		init.cleanup()
