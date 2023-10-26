@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 import io
 import json
 import logging.config
@@ -18,8 +17,9 @@ from zipfile import ZipFile
 
 from pyaxmlparser import APK
 
-from apkleaks.colors import color as col
-from apkleaks.utils import util
+from apkleaks.colors import Color as col
+from apkleaks.utils import Util as util
+
 
 class APKLeaks:
 	def __init__(self, args):
@@ -33,7 +33,7 @@ class APKLeaks:
 		self.output = tempfile.mkstemp(suffix=".%s" % ("json" if self.json else "txt"), prefix=self.prefix)[1] if args.output is None else args.output
 		self.fileout = open(self.output, "%s" % ("w" if self.json else "a"))
 		self.pattern = os.path.join(str(Path(self.main_dir).parent), "config", "regexes.json") if args.pattern is None else args.pattern
-		self.jadx = find_executable("jadx") if find_executable("jadx") is not None else os.path.join(str(Path(self.main_dir).parent), "jadx", "bin", "jadx%s" % (".bat" if os.name == "nt" else "")).replace("\\","/")
+		self.jadx = find_executable("jadx") if find_executable("jadx") is not None else os.path.join(str(Path(self.main_dir).parent), "jadx", "bin", "jadx%s" % (".bat" if os.name == "nt" else "")).replace("\\", "/")
 		self.out_json = {}
 		self.scanned = False
 		logging.config.dictConfig({"version": 1, "disable_existing_loggers": True})
@@ -53,7 +53,7 @@ class APKLeaks:
 			sys.exit()
 
 	def integrity(self):
-		if os.path.exists(self.jadx) is False:
+		if not os.path.exists(self.jadx):
 			util.writeln("Can't find jadx binary.", col.WARNING)
 			valid = {"yes": True, "y": True, "ye": True, "no": False, "n": False}
 			while True:
@@ -70,21 +70,23 @@ class APKLeaks:
 						util.writeln("\nPlease respond with 'yes' or 'no' (or 'y' or 'n').", col.WARNING)
 				except KeyboardInterrupt:
 					sys.exit(util.writeln("\n** Interrupted. Aborting.", col.FAIL))
-			if choice:
-				util.writeln("\n** Downloading jadx...\n", col.OKBLUE)
-				self.dependencies()
-			else:
+
+			if not choice:
 				sys.exit(util.writeln("\n** Aborted.", col.FAIL))
-		if os.path.isfile(self.file):
-			try:
-				self.apk = self.apk_info()
-			except Exception as error:
-				util.writeln(str(error), col.WARNING)
-				sys.exit()
-			else:
-				return self.apk
-		else:
+
+			util.writeln("\n** Downloading jadx...\n", col.OKBLUE)
+			self.dependencies()
+
+		if not os.path.isfile(self.file):
 			sys.exit(util.writeln("It's not a valid file!", col.WARNING))
+
+		try:
+			self.apk = self.apk_info()
+		except Exception as error:
+			util.writeln(str(error), col.WARNING)
+			sys.exit()
+		else:
+			return self.apk
 
 	def decompile(self):
 		util.writeln("** Decompiling APK...", col.OKBLUE)
@@ -94,12 +96,12 @@ class APKLeaks:
 		except Exception:
 			pass
 		comm = "%s" % (" ".join(quote(arg) for arg in args))
-		comm = comm.replace("\'","\"")
+		comm = comm.replace("\'", "\"")
 		os.system(comm)
 
 	def extract(self, name, matches):
 		if len(matches):
-			stdout = ("[%s]" % (name))
+			stdout = ("[%s]" % name)
 			util.writeln("\n" + stdout, col.OKGREEN)
 			self.fileout.write("%s" % (stdout + "\n" if self.json is False else ""))
 			for secret in matches:
@@ -107,7 +109,7 @@ class APKLeaks:
 					if re.match(r"^.(L[a-z]|application|audio|fonts|image|kotlin|layout|multipart|plain|text|video).*\/.+", secret) is not None:
 						continue
 					secret = secret[len("'"):-len("'")]
-				stdout = ("- %s" % (secret))
+				stdout = ("- %s" % secret)
 				print(stdout)
 				self.fileout.write("%s" % (stdout + "\n" if self.json is False else ""))
 			self.fileout.write("%s" % ("\n" if self.json is False else ""))
@@ -117,7 +119,7 @@ class APKLeaks:
 	def scanning(self):
 		if self.apk is None:
 			sys.exit(util.writeln("** Undefined package. Exit!", col.FAIL))
-		util.writeln("\n** Scanning against '%s'" % (self.apk.package), col.OKBLUE)
+		util.writeln("\n** Scanning against '%s'" % self.apk.package, col.OKBLUE)
 		self.out_json["package"] = self.apk.package
 		self.out_json["results"] = []
 		with open(self.pattern) as regexes:
@@ -126,13 +128,13 @@ class APKLeaks:
 				if isinstance(pattern, list):
 					for p in pattern:
 						try:
-							thread = threading.Thread(target = self.extract, args = (name, util.finder(p, self.tempdir)))
+							thread = threading.Thread(target=self.extract, args=(name, util.finder(p, self.tempdir)))
 							thread.start()
 						except KeyboardInterrupt:
 							sys.exit(util.writeln("\n** Interrupted. Aborting...", col.FAIL))
 				else:
 					try:
-						thread = threading.Thread(target = self.extract, args = (name, util.finder(pattern, self.tempdir)))
+						thread = threading.Thread(target=self.extract, args=(name, util.finder(pattern, self.tempdir)))
 						thread.start()
 					except KeyboardInterrupt:
 						sys.exit(util.writeln("\n** Interrupted. Aborting...", col.FAIL))

@@ -1,17 +1,17 @@
-#!/usr/bin/env python3
 import os
 import re
 import sys
-from apkleaks.colors import color as col
+from apkleaks.colors import Color as col
 
-class util:
+
+class Util:
 	@staticmethod
 	def write(message, color):
 		sys.stdout.write("%s%s%s" % (color, message, col.ENDC))
 
 	@staticmethod
 	def writeln(message, color):
-		util.write(message + "\n", color)
+		Util.write(message + "\n", color)
 
 	@staticmethod
 	def finder(pattern, path):

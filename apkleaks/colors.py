@@ -1,6 +1,4 @@
-#!/usr/bin/env python3
-
-class color:
+class Color:
 	HEADER = '\033[95m'
 	OKBLUE = '\033[94m'
 	OKGREEN = '\033[92m'
