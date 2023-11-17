@@ -80,7 +80,8 @@ Here are all the options it supports.
 
 In general, if you don't provide `-o` argument, then it will generate results file automatically.
 
-**NOTE:** By default it will also save the results in text format, use `--json` argument if you want JSON output format.
+> [!TIP]
+> By default it will also save the results in text format, use `--json` argument if you want JSON output format.
 
 ### Pattern
 
@@ -110,7 +111,7 @@ We give user complete discretion to pass the disassembler arguments. For example
 $ apkleaks -f /path/to/file.apk -a "--deobf --log-level DEBUG"
 ```
 
-> **Warning**:
+> [!WARNING]
 > Please pay attention to the default disassembler arguments we use to prevent collisions.
 
 ## License
