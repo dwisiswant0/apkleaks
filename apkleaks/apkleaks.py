@@ -24,6 +24,7 @@ from apkleaks.utils import util
 class APKLeaks:
 	def __init__(self, args):
 		self.apk = None
+		#This gets the absolute path the real path of args.file. We will later pass this parameter as an argument to a cli command, so we must have it's absolute path.
 		self.file = os.path.realpath(args.file)
 		self.json = args.json
 		self.disarg = args.args
@@ -70,11 +71,13 @@ class APKLeaks:
 						util.writeln("\nPlease respond with 'yes' or 'no' (or 'y' or 'n').", col.WARNING)
 				except KeyboardInterrupt:
 					sys.exit(util.writeln("\n** Interrupted. Aborting.", col.FAIL))
+
 			if choice:
 				util.writeln("\n** Downloading jadx...\n", col.OKBLUE)
 				self.dependencies()
 			else:
 				sys.exit(util.writeln("\n** Aborted.", col.FAIL))
+
 		if os.path.isfile(self.file):
 			try:
 				self.apk = self.apk_info()
@@ -88,28 +91,43 @@ class APKLeaks:
 
 	def decompile(self):
 		util.writeln("** Decompiling APK...", col.OKBLUE)
-		args = [self.jadx, self.file, "-d", self.tempdir]
+
+		#If the path contains a space..
+		#This is the case if apkleaks was installed on windows through PyPi, as apkleaks.exe ends up in the path "C:/Program Files/Python39/Lib/site-packages/jadx/bin/jadx.bat" (in this example, under python39)
+		#On windows, if an executable's path doesn't contain spaces but is it quoted anyway, the command fails. We must only quote the path if it has spaces.
+		if(self.jadx.__contains__(" ")):
+			args = ["\"" + self.jadx + "\"", self.file, "-d", self.tempdir]
+		else:
+			args = [self.jadx, self.file, "-d", self.tempdir]
+		
+
 		try:
 			args.extend(re.split(r"\s|=", self.disarg))
 		except Exception:
 			pass
+
+		#add single quotes to every parameter
 		comm = "%s" % (" ".join(quote(arg) for arg in args))
+
+		#jadix.bat doesn't like single quotes. Replace them with double quotes
 		comm = comm.replace("\'","\"")
+
+		#If the path to jadx contains a space
+		if(self.jadx.__contains__(" ")):
+			#eliminate duplicate quotes
+			comm = comm.replace("\"\"","\"")
+		
 		os.system(comm)
 
 	def extract(self, name, matches):
 		if len(matches):
-			stdout = ("[%s]" % (name))
-			util.writeln("\n" + stdout, col.OKGREEN)
-			self.fileout.write("%s" % (stdout + "\n" if self.json is False else ""))
 			for secret in matches:
 				if name == "LinkFinder":
 					if re.match(r"^.(L[a-z]|application|audio|fonts|image|kotlin|layout|multipart|plain|text|video).*\/.+", secret) is not None:
 						continue
 					secret = secret[len("'"):-len("'")]
-				stdout = ("- %s" % (secret))
-				print(stdout)
-				self.fileout.write("%s" % (stdout + "\n" if self.json is False else ""))
+				print(name + ": " + secret)
+				self.fileout.write("%s" % (name + ": " + secret + "\n" if self.json is False else ""))
 			self.fileout.write("%s" % ("\n" if self.json is False else ""))
 			self.out_json["results"].append({"name": name, "matches": matches})
 			self.scanned = True
