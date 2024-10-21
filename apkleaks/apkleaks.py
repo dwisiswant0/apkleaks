@@ -12,7 +12,7 @@ import threading
 from contextlib import closing
 from shutil import which
 from pathlib import Path
-from pipes import quote
+from shlex import quote
 from urllib.request import urlopen
 from zipfile import ZipFile
 
