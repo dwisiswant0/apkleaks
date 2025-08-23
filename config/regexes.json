@@ -40,6 +40,7 @@
 	"MailChimp_API_Key": "[0-9a-f]{32}-us[0-9]{1,2}",
 	"Mailgun_API_Key": "key-[0-9a-zA-Z]{32}",
 	"Mailto": "(?<=mailto:)[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9.-]+",
+	"NPM": "[n][p][m]\_[A-Za-z0-9]{36}",
 	"Password_in_URL": "[a-zA-Z]{3,10}://[^/\\s:@]{3,20}:[^/\\s:@]{3,20}@.{1,100}[\"'\\s]",
 	"PayPal_Braintree_Access_Token": "access_token\\$production\\$[0-9a-z]{16}\\$[0-9a-f]{32}",
 	"PGP_private_key_block": "-----BEGIN PGP PRIVATE KEY BLOCK-----",
