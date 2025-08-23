@@ -8,6 +8,7 @@ import shutil
 import sys
 import tempfile
 import threading
+import platform
 
 from contextlib import closing
 from shutil import which
@@ -93,7 +94,11 @@ class APKLeaks:
 			args.extend(re.split(r"\s|=", self.disarg))
 		except Exception:
 			pass
-		comm = "%s" % (" ".join(quote(arg) for arg in args))
+		current_os = platform.system()
+		if current_os in ["Linux", "Darwin", "FreeBSD", "NetBSD", "OpenBSD", "SunOS"]:
+			comm = "%s" % (" ".join(quote(arg) for arg in args))
+		elif current_os == "Windows":
+			comm = "%s" % (" ".join(arg for arg in args))  
 		comm = comm.replace("\'","\"")
 		os.system(comm)
 
